@@ -53,7 +53,7 @@ int main(){
         if (kl == 'n' || kl == 'N') break;
         }
     std::cout << "Iveskite egzamina: "; cin >> A.egz;
-    A.rez=0.4*std::accumulate(A.paz.begin(), A.paz.end(), 0.0)/A.paz.size() + 0.6*A.egz;
+    skaiciuoti(A);
     grupe.push_back(A);
     A.paz.clear();
     char kl;
@@ -70,6 +70,6 @@ int main(){
     for (auto B : grupe)
     {
         cout << "|"<< left << setw(15) << B.var << "|" << left << setw(20) << B.pav;
-        cout << "|" << right << setw(10) << B.rez << "|\n";
+        cout << "|" << right << setw(10) << B.gVid << "|\n";
         }
     }
