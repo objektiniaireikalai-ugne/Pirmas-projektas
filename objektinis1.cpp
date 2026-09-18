@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <numeric>
+#include <algorithm>
 using std::cin;
 using std::cout;
 using std::left;
@@ -17,6 +18,26 @@ struct studentas {
     double gVid;
     double gMed;
     };
+
+double vidurkis(std::vector<int> paz) {
+    if (paz.size() == 0) return 0;
+    double sum = 0;
+    for (int i=0; i < paz.size(); i++) sum += paz[i];
+    return sum / paz.size();
+}
+
+double mediana(std::vector<int> paz) {
+    if (paz.size() == 0) return 0;
+    std::sort(paz.begin(), paz.end());
+    int n = paz.size();
+    if(n%2 == 0) return (paz[n/2 - 1] + paz[n/2]) / 2.0;
+    return paz[n/2];
+}
+
+void skaiciuoti(studentas &A) {
+    A.gVid = 0.4 * vidurkis(A.paz) + 0.6 * A.egz;
+    A.gMed = 0.4 * mediana(A.paz) + 0.6 * A.egz;
+}
 
 int main(){
     studentas A;
