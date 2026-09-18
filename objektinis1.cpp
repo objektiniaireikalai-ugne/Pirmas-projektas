@@ -13,7 +13,9 @@ using std::vector;
 struct studentas {
     std::string var,pav;
     std::vector<int> paz;
-    int egz, rez;
+    int egz;
+    double gVid;
+    double gMed;
     };
 
 int main(){
