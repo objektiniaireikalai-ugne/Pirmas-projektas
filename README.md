@@ -1,1 +1,1 @@
-# Pirmas-projektas
+# OBJEKTINIS-PROGRAMAVIMAS
