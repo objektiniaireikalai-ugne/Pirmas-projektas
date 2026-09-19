@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <numeric>
+#include <algorithm>
 using std::cin;
 using std::cout;
 using std::left;
@@ -13,8 +14,24 @@ using std::vector;
 struct studentas {
     std::string var,pav;
     std::vector<int> paz;
-    int egz, rez;
-    };
+    int egz;
+    double galutinis_vidurkis;
+    double galutinis_mediana;
+};
+
+double vidurkis(std::vector<int> paz) {
+    if (paz.size() == 0) return 0;
+    double s=0;
+    for (int i=0; i<paz.size(); i++) s=s+paz[i];
+    return s/paz.size();
+}
+
+double mediana(std::vector<int> paz) {
+    if (paz.size() == 0) return 0;
+    std::sort(paz.begin(), paz.end());
+    int n=paz.size();
+    if (n%2==0) return (paz[n/2-1] + paz[n/2]) / 2.0;
+}
 
 int main(){
     studentas A;
@@ -30,7 +47,8 @@ int main(){
         if (kl == 'n' || kl == 'N') break;
         }
     std::cout << "Iveskite egzamina: "; cin >> A.egz;
-    A.rez=0.4*std::accumulate(A.paz.begin(), A.paz.end(), 0.0)/A.paz.size() + 0.6*A.egz;
+    A.galutinis_vidurkis = 0.4 * vidurkis(A.paz) + 0.6 * A.egz;
+    A.galutinis_mediana = 0.4 * mediana(A.paz) + 0.6 * A.egz;
     grupe.push_back(A);
     A.paz.clear();
     char kl;
@@ -47,6 +65,6 @@ int main(){
     for (auto B : grupe)
     {
         cout << "|"<< left << setw(15) << B.var << "|" << left << setw(20) << B.pav;
-        cout << "|" << right << setw(10) << B.rez << "|\n";
+        cout << "|" << right << setw(10) << B.galutinis_vidurkis << "|\n";
         }
     }
