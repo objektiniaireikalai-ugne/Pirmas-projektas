@@ -2,7 +2,6 @@
 #include <iomanip>
 #include <string>
 #include <vector>
-#include <numeric>
 #include <algorithm>
 using std::cin;
 using std::cout;
@@ -31,6 +30,28 @@ double mediana(std::vector<int> paz) {
     std::sort(paz.begin(), paz.end());
     int n=paz.size();
     if (n%2==0) return (paz[n/2-1] + paz[n/2]) / 2.0;
+    return paz[n/2];
+}
+
+void output(vector<studentas> &grupe, bool OPvidurkis, bool OPmediana) {
+    cout << left << setw(16) << "Vardas" << setw(20) << "Pavarde";
+    if (OPvidurkis) cout << right << setw(20) << "Galutinis (Vid.)";
+    if (OPmediana) cout << right << setw(20) << "Galutinis (Med.)";
+    cout << "\n";
+
+    int br = 36
+    if (OPvidurkis) br = br+20;
+    if (OPmediana) br = br+20;
+    for (int i=0; i<br; i++) cout << "-";
+    cout << "\n";
+
+    cout << std::fixed << std::setprecision(2);
+    for (int i=0; i<grupe.size(); i++) {
+        cout << left << setw(16) << grupe[i].var << setw(20) << grupe[i].pav;
+        if (OPvidurkis) cout << right << setw(20) << grupe[i].galutinis_vidurkis;
+        if (OPmediana) cout << right << setw(20) << grupe[i].galutinis_mediana;
+        cout << "\n";
+    }
 }
 
 int main(){
@@ -55,16 +76,6 @@ int main(){
     cout << "Ar turite dar studentu? t/n "; cin >> kl;
         if (kl == 'n' || kl == 'N') break;
     }
-    
-    cout << "Studentu duomenys: \n";
-    cout << "|"<< left << setw(15) << "Vardas" << "|"<< left << setw(20) << "Pavarde";
-    cout << "|" << right << setw(10) << "Final" << "|\n";
-    int br=15+20+10+2;
-    cout<<"|";for (int i=0;i<br; i++) cout<<"-"; cout<<"|\n";
 
-    for (auto B : grupe)
-    {
-        cout << "|"<< left << setw(15) << B.var << "|" << left << setw(20) << B.pav;
-        cout << "|" << right << setw(10) << B.galutinis_vidurkis << "|\n";
-        }
+    output(grupe, true, false);
     }
