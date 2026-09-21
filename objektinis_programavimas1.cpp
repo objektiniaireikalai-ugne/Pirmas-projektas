@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <cstdlib>
+#include <ctime>
 using std::cin;
 using std::cout;
 using std::left;
@@ -17,6 +19,10 @@ struct studentas {
     double galutinis_vidurkis;
     double galutinis_mediana;
 };
+
+int randPaz() {
+    return rand() % 10 + 1;
+}
 
 double vidurkis(std::vector<int> paz) {
     if (paz.size() == 0) return 0;
@@ -37,10 +43,10 @@ void IvestiStudenta(studentas &A) {
     cout << "Vardas: "; cin >> A.var;
     cout << "Pavarde: "; cin >> A.pav;
     A.paz.clear();
-    cout << "Iveskite ND pazymius (baigus - iveskite -1):\n";
+    cout << "Iveskite ND pazymius (1-10). Baigti - iveskite -1:\n";
     while (true) {
         int n;
-        cout << " " << A.paz.size() + 1 << "-as: ";
+        cout << "  " << A.paz.size() + 1 << "-as: ";
         cin >> n;
         if (n == -1) break;
         if (n < 1 || n > 10) {
@@ -59,6 +65,20 @@ void IvestiStudenta(studentas &A) {
     A.galutinis_mediana = 0.4 * mediana(A.paz) + 0.6 * A.egz;
 }
 
+void GeneruotiStudenta(studentas &A) {
+    std::string vardai[] = {"Ugne", "Paulius", "Meda", "Mantas", "Erikas",
+                            "Greta", "Lukas", "Indre", "Andrius", "Maryte"};
+    std::string pavardes[] = {"Segzdaviciute", "Garmasukis", "Plyt", "Jakimas", "Denisenko", "Vilkelyte", "Vaickauskas", "Mamontovas", "Uogyte"};
+    A.var = vardai[rand() % 10];
+    A.pav = pavardes[rand() % 10];
+    A.paz.clear();
+    int kiek = rand() % 8 + 3;  
+    for (int i = 0; i < kiek; i++) A.paz.push_back(randPaz());
+    A.egz = randPaz();
+    A.galutinis_vidurkis = 0.4 * vidurkis(A.paz) + 0.6 * A.egz;
+    A.galutinis_mediana = 0.4 * mediana(A.paz) + 0.6 * A.egz;
+}
+    
 void output(vector<studentas> &grupe, bool OPvidurkis, bool OPmediana) {
     cout << left << setw(16) << "Vardas" << setw(20) << "Pavarde";
     if (OPvidurkis) cout << right << setw(20) << "Galutinis (Vid.)";
@@ -81,13 +101,16 @@ void output(vector<studentas> &grupe, bool OPvidurkis, bool OPmediana) {
 }
 
 int main(){
+    srand(time(0));
+    
     vector<studentas> grupe;
     int pasirinkti;
     
     while(true) { 
         cout << "\n===== MENIU =====\n";
         cout << "1 - Ivesti studentus\n";
-        cout << "2 - Spausdinti rezultatus\n";
+        cout << "2 - Generuoti studentus\n";
+        cout << "3 - Spausdinti rezultatus\n";
         cout << "0 - Baigti\n";
         cin >> pasirinkti;
 
@@ -105,6 +128,17 @@ int main(){
             } while (k == 't' || k == 'T');
         }
         else if (pasirinkti == 2) {
+            int n;
+            cout << "Kiek studentu? ";
+            cin >> n;
+            for (int i = 0; i < n; i++) {
+                studentas A;
+                GeneruotiStudenta(A);
+                grupe.push_back(A);
+            }
+            cout << "Sugeneruota " << n << " studentu.\n";
+        }
+        else if (pasirinkti == 3) {
             if (grupe.size() == 0) {
                 cout << "Sarasas tuscias.\n";
             } else {
