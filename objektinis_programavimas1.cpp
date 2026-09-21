@@ -112,6 +112,7 @@ int main(){
         cout << "2 - Generuoti studentus\n";
         cout << "3 - Spausdinti rezultatus\n";
         cout << "0 - Baigti\n";
+        cout << "Pasirinkimas: ";
         cin >> pasirinkti;
 
         if (pasirinkti == 0) {
@@ -142,6 +143,7 @@ int main(){
             if (grupe.size() == 0) {
                 cout << "Sarasas tuscias.\n";
             } else {
+                cout << "Is viso:" << grupe.size() << " studentai(-u)\n";
                 int v;
                 cout << "Rodyti: 1 - Vid., 2 - Med., 3 - abu: ";
                 cin >> v;
