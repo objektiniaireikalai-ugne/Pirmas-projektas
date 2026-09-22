@@ -140,6 +140,10 @@ void output(vector<studentas> &grupe, bool vid, bool med) {
     }
 }
 
+bool rusiuoti(studentas a, studentas b) {
+    return a.pav < b.pav;
+}
+
 int main(){
     srand(time(0));
     
@@ -186,6 +190,7 @@ int main(){
             if (grupe.empty()) {
                 cout << "Studentu sarasas tuscias.\n";
             } else {
+                std::sort(grupe.begin(), grupe.end(), rusiuoti);
                 int v;
                 cout << "Rodyti: 1 - Vid., 2 - Med., 3 - abu: ";
                 cin >> v;
