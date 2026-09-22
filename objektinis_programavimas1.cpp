@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <fstream>
+#include <sstream>
 #include <cstdlib>
 #include <ctime>
 using std::cin;
@@ -46,20 +48,20 @@ void IvestiStudenta(studentas &A) {
     cout << "Iveskite ND pazymius (1-10). Baigti - iveskite -1:\n";
     while (true) {
         int n;
-        cout << "  " << A.paz.size() + 1 << "-as: ";
+        cout << "ND" << A.paz.size() + 1 << ":";
         cin >> n;
         if (n == -1) break;
         if (n < 1 || n > 10) {
-            cout << "  Pazymys turi buti nuo 1 iki 10. Bandykite dar karta.\n";
+            cout << "  Pazymys turi buti nuo 1 iki 10.\n";
             continue;
         }
         A.paz.push_back(n);
     }
-    cout << "Egzaminas (1-10): ";
+    cout << "Egzaminas pazymys: ";
     while (true) {
         cin >> A.egz;
         if (A.egz >= 1 && A.egz <= 10) break;
-        cout << "Pazymys turi buti nuo 1 iki 10. Bandykite dar karta: ";
+        cout << "Pazymys turi buti nuo 1 iki 10.";
     }
     A.galutinis_vidurkis = 0.4 * vidurkis(A.paz) + 0.6 * A.egz;
     A.galutinis_mediana = 0.4 * mediana(A.paz) + 0.6 * A.egz;
@@ -78,24 +80,62 @@ void GeneruotiStudenta(studentas &A) {
     A.galutinis_vidurkis = 0.4 * vidurkis(A.paz) + 0.6 * A.egz;
     A.galutinis_mediana = 0.4 * mediana(A.paz) + 0.6 * A.egz;
 }
-    
-void output(vector<studentas> &grupe, bool OPvidurkis, bool OPmediana) {
+
+void nuskaitymas(vector<studentas> &grupe) {
+    std::string failas;
+    cout << "Failas: ";
+    cin >> failas;
+
+    std::ifstream in(failas.c_str());
+    if (!in) {
+        cout << "Nepavyko atidaryti.\n";
+        return;
+    }
+    grupe.clear();
+    std::string eilute;
+    std::getline(in, eilute);
+
+    while (std::getline(in, eilute)) {
+        if (eilute.empty()) continue;
+
+        std::istringstream ss(eilute);
+        studentas A;
+        if (!(ss >> A.var >> A.pav)) continue;
+
+        A.paz.clear();
+        int x;
+        while (ss >> x) A.paz.push_back(x);
+        if (A.paz.size() == 0) continue;
+
+        A.egz = A.paz[A.paz.size() - 1];
+        A.paz.pop_back();
+
+        A.galutinis_vidurkis = 0.4 * vidurkis(A.paz) + 0.6 * A.egz;
+        A.galutinis_mediana = 0.4 * mediana(A.paz) + 0.6 * A.egz;
+        grupe.push_back(A);
+    }
+}
+
+void output(vector<studentas> &grupe, bool vid, bool med) {
     cout << left << setw(16) << "Vardas" << setw(20) << "Pavarde";
-    if (OPvidurkis) cout << right << setw(20) << "Galutinis (Vid.)";
-    if (OPmediana) cout << right << setw(20) << "Galutinis (Med.)";
+    if (vid) cout << right << setw(20) << "Galutinis (Vid.)";
+    if (med) cout << right << setw(20) << "Galutinis (Med.)";
     cout << "\n";
 
     int br = 36;
-    if (OPvidurkis) br = br+20;
-    if (OPmediana) br = br+20;
+    if (vid) br = br + 20;
+    if (med) br = br + 20;
     for (int i=0; i<br; i++) cout << "-";
     cout << "\n";
 
+    int n = (int)grupe.size();
+    if (n>50) n = 50;
+
     cout << std::fixed << std::setprecision(2);
-    for (int i=0; i<grupe.size(); i++) {
+    for (int i=0; i<n; i++) {
         cout << left << setw(16) << grupe[i].var << setw(20) << grupe[i].pav;
-        if (OPvidurkis) cout << right << setw(20) << grupe[i].galutinis_vidurkis;
-        if (OPmediana) cout << right << setw(20) << grupe[i].galutinis_mediana;
+        if (vid) cout << right << setw(20) << grupe[i].galutinis_vidurkis;
+        if (med) cout << right << setw(20) << grupe[i].galutinis_mediana;
         cout << "\n";
     }
 }
@@ -110,7 +150,8 @@ int main(){
         cout << "\n===== MENIU =====\n";
         cout << "1 - Ivesti studentus\n";
         cout << "2 - Generuoti studentus\n";
-        cout << "3 - Spausdinti rezultatus\n";
+        cout << "3 - Nuskaityti studentus is failo\n";
+        cout << "4 - Spausdinti rezultatus\n";
         cout << "0 - Baigti\n";
         cout << "Pasirinkimas: ";
         cin >> pasirinkti;
@@ -130,26 +171,25 @@ int main(){
         }
         else if (pasirinkti == 2) {
             int n;
-            cout << "Kiek studentu? ";
+            cout << "Kiek studentu sugeneruoti? ";
             cin >> n;
             for (int i = 0; i < n; i++) {
                 studentas A;
                 GeneruotiStudenta(A);
                 grupe.push_back(A);
             }
-            cout << "Sugeneruota " << n << " studentu.\n";
         }
         else if (pasirinkti == 3) {
-            if (grupe.size() == 0) {
-                cout << "Sarasas tuscias.\n";
+            nuskaitymas(grupe);
+        }
+        else if (pasirinkti == 4) {
+            if (grupe.empty()) {
+                cout << "Studentu sarasas tuscias.\n";
             } else {
-                cout << "Is viso:" << grupe.size() << " studentai(-u)\n";
                 int v;
                 cout << "Rodyti: 1 - Vid., 2 - Med., 3 - abu: ";
                 cin >> v;
-                bool rv = (v == 1 || v == 3);
-                bool rm = (v == 2 || v == 3);
-                output(grupe, rv, rm);
+                output(grupe, v == 1 || v == 3, v == 2 || v == 3);
             }
         }
         else {
