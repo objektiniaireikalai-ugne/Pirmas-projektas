@@ -49,7 +49,12 @@ void IvestiStudenta(studentas &A) {
     while (true) {
         int n;
         cout << "ND" << A.paz.size() + 1 << ":";
-        cin >> n;
+        if (!(cin >> n)) {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            cout << " Klaida: iveskite skaiciu.\n";
+            continue;
+        }
         if (n == -1) break;
         if (n < 1 || n > 10) {
             cout << "  Pazymys turi buti nuo 1 iki 10.\n";
@@ -59,7 +64,12 @@ void IvestiStudenta(studentas &A) {
     }
     cout << "Egzaminas pazymys: ";
     while (true) {
-        cin >> A.egz;
+        if (!(cin >> A.egz)) {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            cout << " Klaida: iveskite skaiciu.\n";
+            continue;
+        }
         if (A.egz >= 1 && A.egz <= 10) break;
         cout << "Pazymys turi buti nuo 1 iki 10.";
     }
@@ -151,8 +161,12 @@ void GeneruotiFaila() {
     cout << "Failo pavadinimas: ";
     cin >> failas;
     cout << "Kiek studentu sugeneruoti? ";
-    cin >> n;
-
+    if (!(cin >> n)) {
+        cin.clear();
+        cin.ignore(10000, '\n');
+        cout << "Klaida: iveskite skaiciu.\n";
+        return;
+    }
     std::ofstream out(failas.c_str());
     out << left << setw(16) << "Vardas" << setw(20) << "Pavarde";
     for (int i=1; i <= 15; i++) out << right << setw(6) << "ND" << i;
@@ -182,8 +196,13 @@ int main(){
         cout << "5 - Sugeneruoti testavimo faila\n";
         cout << "0 - Baigti\n";
         cout << "Pasirinkimas: ";
-        cin >> pasirinkti;
-
+        if (!(cin >> pasirinkti)) {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            cout << "Klaida: iveskite skaiciu.\n";
+            continue;
+        }
+        
         if (pasirinkti == 0) {
             break;
         }
@@ -200,7 +219,12 @@ int main(){
         else if (pasirinkti == 2) {
             int n;
             cout << "Kiek studentu sugeneruoti? ";
-            cin >> n;
+            if (!(cin >> n)) {
+                cin.clear();
+                cin.ignore(10000, '\n');
+                cout << "Klaida: iveskite skaiciu.\n";
+                continue;
+            }
             for (int i = 0; i < n; i++) {
                 studentas A;
                 GeneruotiStudenta(A);
