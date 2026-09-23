@@ -68,9 +68,10 @@ void IvestiStudenta(studentas &A) {
 }
 
 void GeneruotiStudenta(studentas &A) {
-    std::string vardai[] = {"Ugne", "Paulius", "Meda", "Mantas", "Erikas",
+    std::string vardai[] = {"Ugne", "Paulius", "Gustas", "Adomas", "Erikas",
                             "Greta", "Lukas", "Indre", "Andrius", "Maryte"};
-    std::string pavardes[] = {"Segzdaviciute", "Garmasukis", "Plyt", "Jakimas", "Denisenko", "Vilkelyte", "Vaickauskas", "Mamontovas", "Uogyte"};
+    std::string pavardes[] = {"Segzdaviciute", "Paulauskas", "Gustavicius", "Adomavicius",
+                                "Erikauskas", "Gretaite", "Lukauskas", "Indraite", "Mamontovas", "Uogyte"};
     A.var = vardai[rand() % 10];
     A.pav = pavardes[rand() % 10];
     A.paz.clear();
@@ -144,6 +145,28 @@ bool rusiuoti(studentas a, studentas b) {
     return a.pav < b.pav;
 }
 
+void GeneruotiFaila() {
+    std::string failas;
+    int n;
+    cout << "Failo pavadinimas: ";
+    cin >> failas;
+    cout << "Kiek studentu sugeneruoti? ";
+    cin >> n;
+
+    std::ofstream out(failas.c_str());
+    out << left << setw(16) << "Vardas" << setw(20) << "Pavarde";
+    for (int i=1; i <= 15; i++) out << right << setw(6) << "ND" << i;
+    out << right << setw(6) << "Egz." << "\n";
+
+    for (int i=0; i<n; i++) {
+        studentas A;
+        GeneruotiStudenta(A);
+        out << left << setw(16) << A.var << setw(20) << A.pav;
+        for (int j=0; j<15; j++) out << right << setw(6) << randPaz();
+        out << right << setw(6) << randPaz() << "\n";
+    }
+}
+
 int main(){
     srand(time(0));
     
@@ -156,6 +179,7 @@ int main(){
         cout << "2 - Generuoti studentus\n";
         cout << "3 - Nuskaityti studentus is failo\n";
         cout << "4 - Spausdinti rezultatus\n";
+        cout << "5 - Sugeneruoti testavimo faila\n";
         cout << "0 - Baigti\n";
         cout << "Pasirinkimas: ";
         cin >> pasirinkti;
@@ -197,8 +221,11 @@ int main(){
                 output(grupe, v == 1 || v == 3, v == 2 || v == 3);
             }
         }
+        else if (pasirinkti == 5) {
+            GeneruotiFaila();
+        }
         else {
-            cout << "Neteisingas pasirinkimas.\n";
+            cout << "Neegzistuoja toks pasirinkimas.\n";
         }
     }
     return 0;
