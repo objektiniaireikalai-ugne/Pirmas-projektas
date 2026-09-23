@@ -12,6 +12,7 @@ Objektinio programavimo kurso darbas. Programa leidžia surinkti studentų namų
 - [Reikalavimai ir paleidimas](#reikalavimai-ir-paleidimas)
 - [Naudojimas](#naudojimas)
 - [Duomenų failo formatas](#duomenų-failo-formatas)
+- [Klaidų tikrinimas](#klaidų-tikrinimas)
 - [Versijos (releases)](#versijos-releases)
 
 ## Naudojimas
@@ -20,21 +21,21 @@ Paleidus programą rodomas meniu:
 
 ```text
 ===== MENIU =====
-1 - Ivesti studentus ranka
-2 - Generuoti studentus atsitiktinai
+1 - Ivesti studentus 
+2 - Generuoti studentus
 3 - Nuskaityti studentus is failo
 4 - Spausdinti rezultatus
 5 - Sugeneruoti testavimo faila
-0 - Baigti darba
+0 - Baigti
 ```
 
-**1 – Įvesti studentus ranka** – prašoma vardo ir pavardės, po to vedami namų darbų pažymiai (įvedimas baigiamas įvedus `-1`), tada įvedamas egzamino pažymys. Programa tikrina, kad pažymys būtų intervale [1; 10].
+**1 – Įvesti studentus** – prašoma ranka įvesti vardą ir pavardę, po to vedami namų darbų pažymiai (įvedimas baigiamas įvedus `-1`), tada įvedamas egzamino pažymys. Programa tikrina, kad pažymys būtų intervale [1; 10].
 
-**2 – Generuoti studentus atsitiktinai** – vartotojas nurodo studentų skaičių, programa sukuria studentus su atsitiktiniais vardais, pavardėmis, pažymiais.
+**2 – Generuoti studentus** – vartotojas nurodo studentų skaičių, programa sukuria studentus su atsitiktiniais vardais, pavardėmis, pažymiais.
 
 **3 – Nuskaityti studentus iš failo** – prašoma failo pavadinimo (pvz., `kursiokai.txt`). Paskutinis eilutės skaičius laikomas egzamino pažymiu, visi prieš jį – namų darbais.
 
-**4 – Spausdinti rezultatus** – studentai surikiuojami pagal pavardę ir išvedami lentele. Galima pasirinkti rodyti vidurkį, medianą arba abu. Jei studentų daugiau nei 50, rodomi tik pirmi 50.
+**4 – Spausdinti rezultatus** – studentai surikiuojami abėcėlės tvarka pagal pavardę ir išvedami lentele. Galima pasirinkti rodyti vidurkį, medianą arba abu. Jei studentų daugiau nei 50, rodomi tik pirmi 50.
 
 **5 – Sugeneruoti testavimo failą** – vartotojas nurodo failo pavadinimą ir studentų skaičių, programa sukuria failą su atsitiktiniais duomenimis.
 
@@ -49,6 +50,21 @@ Petras          Petraitis                 5     6     4     7     8     6
 Ona             Onaityte                 10    10     9     9    10    10
 ```
 Namų darbų pažymių skaičius iš anksto nėra žinomas – skaitomi visi eilutėje esantys skaičiai, o paskutinis iš jų priskiriamas egzaminui. Stulpelių skaičius skirtingose eilutėse gali skirtis, skiriamieji simboliai – bet koks tarpų kiekis.
+
+## Klaidų tikrinimas
+
+Programa apsaugota nuo neteisingo vartotojo įvedimo ir neegzistuojančių failų:
+
+- **Raidė vietoj skaičiaus** (pvz., `s` vietoj pažymio ar meniu punkto) – srautas išvalomas (`cin.clear()`, `cin.ignore()`), rodomas klaidos pranešimas ir prašoma įvesti iš naujo. Programa nenulūžta.
+
+- **Pažymys ne intervale [1; 10]** – rodomas pranešimas „Pazymys turi buti nuo 1 iki 10" ir prašoma įvesti iš naujo.
+
+- **Neįvesta nė vieno namų darbų** – `vidurkis()` ir `mediana()` funkcijos grąžina 0, jei pažymių sąrašas tuščias. Dalyba iš nulio neįvyksta, galutinis balas apskaičiuojamas tik iš egzamino (0.6 × egzaminas).
+
+- **Failas neegzistuoja** – rodomas pranešimas „Nepavyko atidaryti" ir grįžtama į meniu.
+
+- **Nežinomas meniu pasirinkimas** – rodomas pranešimas „Neegzistuoja toks pasirinkimas" ir meniu rodomas iš naujo.
+
 
 ## Versijos (releases)
 
@@ -89,12 +105,14 @@ Pirmoji veikianti programos versija.
 
 **Kas nauja, palyginti su v.pradinė:**
 
-- Duomenų skaitymas iš failo (`nuskaitymas()`): vartotojas pats nurodo failo pavadinimą, tad programa nėra pririšta prie vieno konkretaus failo. Eilutė skaidoma per `istringstream`, paskutinis skaičius traktuojamas kaip egzaminas.
+- **Duomenų skaitymas iš failo (`nuskaitymas()`):** vartotojas pats nurodo failo pavadinimą, tad programa nėra pririšta prie vieno konkretaus failo. Eilutė skaidoma per `istringstream`, paskutinis skaičius traktuojamas kaip egzaminas.
 
-- Rikiavimas pagal pavardę prieš išvedimą (`std::sort` su `rusiuoti()` funkcija).
+- **Rikiavimas pagal pavardę** prieš išvedimą (`std::sort` su `rusiuoti()` funkcija).
 
-- Testavimo failų generavimas (`GeneruotiFaila()`): vartotojas nurodo failo pavadinimą ir studentų skaičių, programa sukuria failą su atsitiktiniais duomenimis pagal pateiktą formatą.
+- **Testavimo failų generavimas (`GeneruotiFaila()`):** vartotojas nurodo failo pavadinimą ir studentų skaičių, programa sukuria failą su atsitiktiniais duomenimis pagal pateiktą formatą.
 
-- Limitas spausdinimui: kai sąraše daugiau nei 50 studentų, rodomi tik pirmi 50 įrašų – kad su `studentai100000.txt` ar `studentai1000000.txt` išvestis liktų įskaitoma.
+- **Limitas spausdinimui:** kai sąraše daugiau nei 50 studentų, rodomi tik pirmi 50 įrašų – kad su `studentai100000.txt` ar `studentai1000000.txt` išvestis liktų įskaitoma.
 
-- Testavimo failai: `studentai10000.txt`, `studentai100000.txt`, `studentai1000000.txt` – skirtingo dydžio testavimui.
+- **Įvesties klaidų tikrinimas:** pridėti `cin.clear()` ir `cin.ignore()` apsaugai nuo neteisingo įvedimo (raidė vietoj skaičiaus). Programa rodo klaidų pranešimus ir prašo įvesti iš naujo – nenulūžta.
+
+- **Apsauga nuo dalybos iš nulio**: jei studentas neturi nė vieno namų darbų pažymio, `vidurkis()` ir `mediana()` grąžina 0, o galutinis balas skaičiuojamas tik iš egzamino.
