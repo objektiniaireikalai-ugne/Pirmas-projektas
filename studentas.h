@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-struct Studentas {
+struct studentas {
     std::string var;        
     std::string pav;        
     std::vector<int> paz;    
