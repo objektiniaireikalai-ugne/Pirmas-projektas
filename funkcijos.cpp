@@ -4,15 +4,18 @@
 #include <fstream>
 #include <iomanip>
 #include <sstream>
+#include <iostream>
 
-double vidurkis(const std::vector<int>& paz) {
+using namespace std;
+
+double vidurkis(vector<int> paz) {
     if (paz.size() == 0) return 0;
     double s = 0;
     for (int i=0; i<paz.size(); i++) s = s+paz[i];
     retun s/paz.size();
 }
 
-double mediana(std::vector<int> paz) {
+double mediana(vector<int> paz) {
     if (paz.size() == 0) return 0;
     std::sort(paz.begin(), paz.end());
     int n=paz.size();
@@ -25,14 +28,14 @@ void skaiciuoti(studentas& A) {
     A.galutinis_mediana = 0.4 * mediana(A.paz) + 0.6 * A.egz;
 }
 
-bool rusiuoti(const studentas& a, const studentas& b) {
+bool rusiuoti(studentas a, studentas b) {
     return a.pav < b.pav;
 }
 
 
 
-static std::mt19937 gen(std::random_device{}());
-static std::uniform_int_distribution<> dist(1,10);
+static mt19937 gen(random_device{}());
+static uniform_int_distribution<> dist(1,10);
 
 int GeneruotiPazymi() {
     return dist(gen);
@@ -40,8 +43,8 @@ int GeneruotiPazymi() {
 
 studentas GeneruotiStudenta(int numeris) {
     studentas A;
-    A.var = "Vardas" + std::to_string(numeris);
-    A.pav = "Pavarde" + std::to_string(numeris);
+    A.var = "Vardas" + to_string(numeris);
+    A.pav = "Pavarde" + to_string(numeris);
     A.paz.clear();
 
     int kiek = dist(gen) % 8 + 3;
@@ -53,7 +56,7 @@ studentas GeneruotiStudenta(int numeris) {
     return A;
 )
 
-void GeneruotiStudenta(std::vector<studentas>& grupe, int kiek) {
+void GeneruotiStudenta(vector<studentas>& grupe, int kiek) {
     grupe.clear();
     grupe.reserve(kiek);
     for (int i=0; i<kiek; i++) {
@@ -61,47 +64,43 @@ void GeneruotiStudenta(std::vector<studentas>& grupe, int kiek) {
     }
 }
 
-void GeneruotiFaila(const std::string& failas, int kiek) {
-    std::ofstream out(failas.c_str());
-    out << std::left << std::setw(16) << "Vardas" << std::setw(20) << "Pavarde";
+void GeneruotiFaila(const string& failas, int kiek) {
+    ofstream out(failas.c_str());
+    out << left << etw(16) << "Vardas" << setw(20) << "Pavarde";
     for (int i=1; 1<=15; i++) {
-        out << std::right << std::setw(6) << ("ND" + std::to_string(i));
+        out << right << setw(6) << ("ND" + to_string(i));
     }
-    out << std::right << std::setw(6) << "Egz." << "\n";
+    out << right << setw(6) << "Egz." << "\n";
 
     for (int i=0; i<kiek; i++) {
         studentas A = GeneruotiStudenta(i+1);
-        out << std::left << std::setw(16) << A.var << std::setw(20) << A.pav;
+        out << left << setw(16) << A.var << setw(20) << A.pav;
         for (int j=0; j<15; j++) {
-            out << std::right << std::setw(6) << GeneruotiPazymi();
+            out << right << setw(6) << GeneruotiPazymi();
         }
-        out << std::right << std::setw(6) << GeneruotiPazymi() << "\n";
+        out << right << setw(6) << GeneruotiPazymi() << "\n";
     }
 }
 
 
-bool nuskaitymas(std::vector<studentas>& grupe, const std::string& failas) {
-    std::ifstream in(failas.c_str());
-    if (!in) {
-        return false;
-    }
+bool nuskaitymas(vector<studentas>& grupe, const string& failas) {
+    ifstream in(failas.c_str());
+    if (!in) return false;
 
     grupe.clear()
-    std::string eilute;
-    std::getline(in, eilute);
+    string eilute;
+    getline(in, eilute);
 
-    while(std::getline(in, eilute)) {
+    while(getline(in, eilute)) {
         if (eilute.empty()) continue;
 
-        std::istringstream ss(eilute);
+        istringstream ss(eilute);
         studentas A;
         if (!(ss >> A.var >> A.pav)) continue;
 
         A.paz.clear();
         int x;
-        while (ss>>x) {
-            A.paz.push_back(x);
-        }
+        while (ss >> x) A.paz.push_back(x);
         if (A.paz.size() == 0) continue;
 
         A.egz = A.paz[A.paz.size()-1];
@@ -114,7 +113,7 @@ bool nuskaitymas(std::vector<studentas>& grupe, const std::string& failas) {
 }
 
 
-void kategorijos(const std::vector<studentas>& grupe, std::vector<studentas>& nabageliai, std::vector<studentas>& kietiakai) {
+void kategorijos(const vector<studentas>& grupe, vector<studentas>& nabageliai, vector<studentas>& kietiakai) {
     nabageliai.clear();
     kietiakai.clear();
 
@@ -127,6 +126,39 @@ void kategorijos(const std::vector<studentas>& grupe, std::vector<studentas>& na
     }
 }
 
+void IsvestiFaila(const string& failas, const vector<studentas>& grupe, bool rodytiVid) {
+    ofstream out(failas.c_str());
 
+    out << left << setw(16) << "Vardas" << setw(20) << "Pavarde" << right << setw(20) << "Galutinis" << "\n";
+    out << fixed << setprecision(2);
+    for (int i=0; i<(int)grupe.size(); i++) {
+        out << left << setw(16) << grupe[i].var << setw(20) << grupe[i].pav << right << setw(20);
+        if (rodytiVid) {
+            out << grupe[i].galutinis_vidurkis;
+        } else {
+            out << grupe[i].galutinis_mediana;
+        }
+        out << "\n";
+    }
+}
 
+void output(vector<studentas>& grupe, bool vid, bool med) {
+    cout << left << setw(16) << "Vardas" << setw(20) << "Pavarde";
+    if (vid) cout << right << setw(20) << "Galutinis (Vid.)";
+    if (med) cout << right << setw(20) << "Galutinis (Med.)";
+    cout << "\n";
 
+    int br = 36;
+    if (vid) br = br + 20;
+    if (med) br = br + 20;
+    for (int i = 0; i < br; i++) cout << "-";
+    cout << "\n";
+
+    cout << fixed << setprecision(2);
+    for (int i = 0; i < (int)grupe.size(); i++) {
+        cout << left << setw(16) << grupe[i].var << setw(20) << grupe[i].pav;
+        if (vid) cout << right << setw(20) << grupe[i].galutinis_vidurkis;
+        if (med) cout << right << setw(20) << grupe[i].galutinis_mediana;
+        cout << "\n";
+    }
+}
