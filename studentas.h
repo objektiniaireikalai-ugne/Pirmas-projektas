@@ -7,7 +7,7 @@
 struct Studentas {
     std::string var;        
     std::string pav;        
-    std::vector<int> nd;    
+    std::vector<int> paz;    
     int egz;                 
     double galutinis_vidurkis;           
     double galutinis_mediana;           
