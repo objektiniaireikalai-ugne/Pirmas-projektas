@@ -15,9 +15,9 @@ Studentas GeneruotiStudenta(int numeris);
 void GeneruotiStudentus(std::vector<Studentas>& grupe, int kiek);
 void GeneruotiFaila(const std::string& failas, int kiek);
 
-bool nuskaityti(std::vector<Studentas>& grupe, const std::string& failas);
+bool nuskaitymas(std::vector<Studentas>& grupe, const std::string& failas);
 
-void padalinti(const std::vector<Studentas>& grupe,
+void kategorijos(const std::vector<Studentas>& grupe,
                std::vector<Studentas>& vargsiukai,
                std::vector<Studentas>& kietiakiai);
 void IsvestiIFaila(const std::string& failas,
