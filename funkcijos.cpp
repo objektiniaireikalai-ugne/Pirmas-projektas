@@ -25,7 +25,7 @@ void skaiciuoti(studentas& A) {
     A.galutinis_mediana = 0.4 * mediana(A.paz) + 0.6 * A.egz;
 }
 
-bool rusiuoti(const Studentas& a, const Studentas& b) {
+bool rusiuoti(const studentas& a, const studentas& b) {
     return a.pav < b.pav;
 }
 
@@ -38,8 +38,8 @@ int GeneruotiPazymi() {
     return dist(gen);
 }
 
-Studentas GeneruotiStudenta(int numeris) {
-    Studentas A;
+studentas GeneruotiStudenta(int numeris) {
+    studentas A;
     A.var = "Vardas" + std::to_string(numeris);
     A.pav = "Pavarde" + std::to_string(numeris);
     A.paz.clear();
@@ -53,7 +53,7 @@ Studentas GeneruotiStudenta(int numeris) {
     return A;
 )
 
-void GeneruotiStudenta(std::vector<Studentas>& grupe, int kiek) {
+void GeneruotiStudenta(std::vector<studentas>& grupe, int kiek) {
     grupe.clear();
     grupe.reserve(kiek);
     for (int i=0; i<kiek; i++) {
@@ -70,7 +70,7 @@ void GeneruotiFaila(const std::string& failas, int kiek) {
     out << std::right << std::setw(6) << "Egz." << "\n";
 
     for (int i=0; i<kiek; i++) {
-        Studentas A = GeneruotiStudenta(i+1);
+        studentas A = GeneruotiStudenta(i+1);
         out << std::left << std::setw(16) << A.var << std::setw(20) << A.pav;
         for (int j=0; j<15; j++) {
             out << std::right << std::setw(6) << GeneruotiPazymi();
@@ -80,7 +80,7 @@ void GeneruotiFaila(const std::string& failas, int kiek) {
 }
 
 
-bool nuskaitymas(std::vector<Studentas>& grupe, const std::string& failas) {
+bool nuskaitymas(std::vector<studentas>& grupe, const std::string& failas) {
     std::ifstream in(failas.c_str());
     if (!in) {
         return false;
@@ -94,7 +94,7 @@ bool nuskaitymas(std::vector<Studentas>& grupe, const std::string& failas) {
         if (eilute.empty()) continue;
 
         std::istringstream ss(eilute);
-        Studentas A;
+        studentas A;
         if (!(ss >> A.var >> A.pav)) continue;
 
         A.paz.clear();
@@ -112,6 +112,21 @@ bool nuskaitymas(std::vector<Studentas>& grupe, const std::string& failas) {
     }
     return true;
 }
+
+
+void kategorijos(const std::vector<studentas>& grupe, std::vector<studentas>& nabageliai, std::vector<studentas>& kietiakai) {
+    nabageliai.clear();
+    kietiakai.clear();
+
+    for (int i=0; i<(int)grupe.size(); i++) {
+        if (grupe[i].galutinis_vidurkis < 5.0) {
+            nabageliai.push_back(grupe[i]);
+        } else {
+            kietiakai.push_back(grupe[i]);
+        }
+    }
+}
+
 
 
 
