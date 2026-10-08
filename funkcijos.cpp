@@ -11,15 +11,15 @@ using namespace std;
 double vidurkis(vector<int> paz) {
     if (paz.size() == 0) return 0;
     double s = 0;
-    for (int i=0; i<paz.size(); i++) s = s+paz[i];
-    retun s/paz.size();
+    for (int i = 0; i < paz.size(); i++) s = s + paz[i];
+    return s / paz.size();
 }
 
 double mediana(vector<int> paz) {
     if (paz.size() == 0) return 0;
     std::sort(paz.begin(), paz.end());
-    int n=paz.size();
-    if (n%2 == 0) return (paz[n/2 - 1] + paz[n/2]) / 2.0;
+    int n = paz.size();
+    if (n % 2 == 0) return (paz[n/2 - 1] + paz[n/2]) / 2.0;
     return paz[n/2];
 }
 
@@ -28,14 +28,21 @@ void skaiciuoti(studentas& A) {
     A.galutinis_mediana = 0.4 * mediana(A.paz) + 0.6 * A.egz;
 }
 
-bool rusiuoti(studentas a, studentas b) {
+bool RusiuotiPagalVarda(const studentas& a, const studentas& b) {
+    return a.var < b.var;
+}
+
+bool RusiuotiPagalPavarde(const studentas& a, const studentas& b) {
     return a.pav < b.pav;
 }
 
+bool RusiuotiPagalBala(const studentas& a, const studentas& b) {
+    return a.galutinis_vidurkis < b.galutinis_vidurkis;
+}
 
 
 static mt19937 gen(random_device{}());
-static uniform_int_distribution<> dist(1,10);
+static uniform_int_distribution<> dist(1, 10);
 
 int GeneruotiPazymi() {
     return dist(gen);
@@ -48,50 +55,49 @@ studentas GeneruotiStudenta(int numeris) {
     A.paz.clear();
 
     int kiek = dist(gen) % 8 + 3;
-    for (int i=0; i<kiek; i++) {
+    for (int i = 0; i < kiek; i++) {
         A.paz.push_back(GeneruotiPazymi());
     }
     A.egz = GeneruotiPazymi();
     skaiciuoti(A);
     return A;
-)
+}
 
-void GeneruotiStudenta(vector<studentas>& grupe, int kiek) {
+void GeneruotiStudentus(vector<studentas>& grupe, int kiek) {
     grupe.clear();
     grupe.reserve(kiek);
-    for (int i=0; i<kiek; i++) {
-        grupe.push_back(GeneruotiStudenta(i+1));
+    for (int i = 0; i < kiek; i++) {
+        grupe.push_back(GeneruotiStudenta(i + 1));
     }
 }
 
 void GeneruotiFaila(const string& failas, int kiek) {
     ofstream out(failas.c_str());
-    out << left << etw(16) << "Vardas" << setw(20) << "Pavarde";
-    for (int i=1; 1<=15; i++) {
+    out << left << setw(16) << "Vardas" << setw(20) << "Pavarde";
+    for (int i = 1; i <= 15; i++) {
         out << right << setw(6) << ("ND" + to_string(i));
     }
     out << right << setw(6) << "Egz." << "\n";
 
-    for (int i=0; i<kiek; i++) {
-        studentas A = GeneruotiStudenta(i+1);
+    for (int i = 0; i < kiek; i++) {
+        studentas A = GeneruotiStudenta(i + 1);
         out << left << setw(16) << A.var << setw(20) << A.pav;
-        for (int j=0; j<15; j++) {
+        for (int j = 0; j < 15; j++) {
             out << right << setw(6) << GeneruotiPazymi();
         }
         out << right << setw(6) << GeneruotiPazymi() << "\n";
     }
 }
 
-
 bool nuskaitymas(vector<studentas>& grupe, const string& failas) {
     ifstream in(failas.c_str());
     if (!in) return false;
 
-    grupe.clear()
+    grupe.clear();
     string eilute;
     getline(in, eilute);
 
-    while(getline(in, eilute)) {
+    while (getline(in, eilute)) {
         if (eilute.empty()) continue;
 
         istringstream ss(eilute);
@@ -103,7 +109,7 @@ bool nuskaitymas(vector<studentas>& grupe, const string& failas) {
         while (ss >> x) A.paz.push_back(x);
         if (A.paz.size() == 0) continue;
 
-        A.egz = A.paz[A.paz.size()-1];
+        A.egz = A.paz[A.paz.size() - 1];
         A.paz.pop_back();
 
         skaiciuoti(A);
@@ -112,12 +118,13 @@ bool nuskaitymas(vector<studentas>& grupe, const string& failas) {
     return true;
 }
 
-
-void kategorijos(const vector<studentas>& grupe, vector<studentas>& nabageliai, vector<studentas>& kietiakai) {
+void kategorijos(const vector<studentas>& grupe,
+                 vector<studentas>& nabageliai,
+                 vector<studentas>& kietiakai) {
     nabageliai.clear();
     kietiakai.clear();
 
-    for (int i=0; i<(int)grupe.size(); i++) {
+    for (int i = 0; i < (int)grupe.size(); i++) {
         if (grupe[i].galutinis_vidurkis < 5.0) {
             nabageliai.push_back(grupe[i]);
         } else {
@@ -126,12 +133,14 @@ void kategorijos(const vector<studentas>& grupe, vector<studentas>& nabageliai, 
     }
 }
 
-void IsvestiFaila(const string& failas, const vector<studentas>& grupe, bool rodytiVid) {
+
+void IsvestiIFaila(const string& failas, const vector<studentas>& grupe, bool rodytiVid) {
     ofstream out(failas.c_str());
 
     out << left << setw(16) << "Vardas" << setw(20) << "Pavarde" << right << setw(20) << "Galutinis" << "\n";
+
     out << fixed << setprecision(2);
-    for (int i=0; i<(int)grupe.size(); i++) {
+    for (int i = 0; i < (int)grupe.size(); i++) {
         out << left << setw(16) << grupe[i].var << setw(20) << grupe[i].pav << right << setw(20);
         if (rodytiVid) {
             out << grupe[i].galutinis_vidurkis;
@@ -142,23 +151,22 @@ void IsvestiFaila(const string& failas, const vector<studentas>& grupe, bool rod
     }
 }
 
-void output(vector<studentas>& grupe, bool vid, bool med) {
+void output(const vector<studentas>& grupe, int limit) {
     cout << left << setw(16) << "Vardas" << setw(20) << "Pavarde";
-    if (vid) cout << right << setw(20) << "Galutinis (Vid.)";
-    if (med) cout << right << setw(20) << "Galutinis (Med.)";
-    cout << "\n";
+    cout << right << setw(20) << "Galutinis" << "\n";
 
-    int br = 36;
-    if (vid) br = br + 20;
-    if (med) br = br + 20;
+    int br = 56;
     for (int i = 0; i < br; i++) cout << "-";
     cout << "\n";
 
+    int n = (int)grupe.size();
+    if (limit > 0 && limit < n) n = limit;
+
     cout << fixed << setprecision(2);
-    for (int i = 0; i < (int)grupe.size(); i++) {
-        cout << left << setw(16) << grupe[i].var << setw(20) << grupe[i].pav;
-        if (vid) cout << right << setw(20) << grupe[i].galutinis_vidurkis;
-        if (med) cout << right << setw(20) << grupe[i].galutinis_mediana;
+    for (int i = 0; i < n; i++) {
+        cout << left << setw(16) << grupe[i].var
+             << setw(20) << grupe[i].pav
+             << right << setw(20) << grupe[i].galutinis_vidurkis;
         cout << "\n";
     }
 }
