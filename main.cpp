@@ -13,9 +13,9 @@ double sek(steady_clock::time_point p1, steady_clock::time_point p2) {
 }
 
 void RusiavimoPasirinkimas(vector<studentas>& grupe, int pasirinkimas) {
-    if (pasirinkimas == 1)      sort(grupe.begin(), grupe.end(), rusiuotiPagalVarda);
-    else if (pasirinkimas == 2) sort(grupe.begin(), grupe.end(), rusiuotiPagalPavarde);
-    else                        sort(grupe.begin(), grupe.end(), rusiuotiPagalBala);
+    if (pasirinkimas == 1)      sort(grupe.begin(), grupe.end(), RusiuotiPagalVarda);
+    else if (pasirinkimas == 2) sort(grupe.begin(), grupe.end(), RusiuotiPagalPavarde);
+    else                        sort(grupe.begin(), grupe.end(), RusiuotiPagalBala);
 }
 
 void TestuotiFaila(const string& failas, int rusRusis, int kartai) {
