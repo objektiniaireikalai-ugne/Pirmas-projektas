@@ -4,7 +4,6 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-
 using namespace std;
 using namespace std::chrono;
 
@@ -37,7 +36,7 @@ void TestuotiFaila(const string& failas, int rusRusis, int kartai) {
         n = grupe.size();
 
         auto t3 = steady_clock::now();
-        rusiuotiPasirinktai(grupe, rusRusis);
+        RusiavimoPasirinkimas(grupe, rusRusis);
         auto t4 = steady_clock::now();
         sumR += sek(t3, t4);
 
@@ -103,19 +102,21 @@ void GeneruotiVisus() {
 int main() {
     vector<studentas> grupe, vargsiukai, kietiakiai;
 
-    cout << "Rusiuoti pagal: 1 - varda, 2 - pavarde, 3 - bala: ";
+    cout << "Isvesties failus rusiuoti pagal: 1 - varda, 2 - pavarde, 3 - bala: ";
     int rusRusis;
     cin >> rusRusis;
 
     int p;
     while (true) {
         cout << "\n===== MENIU =====\n";
-        cout << "1 - Generuoti faila\n";
-        cout << "2 - Generuoti visus 5 failus\n";
-        cout << "3 - Nuskaityti is failo\n";
-        cout << "4 - Padalinti i grupes\n";
-        cout << "5 - Isvesti i grupiu failus\n";
-        cout << "6 - Testavimas\n";
+        cout << "1 - Ivesti studentus ranka\n";
+        cout << "2 - Generuoti faila\n";
+        cout << "3 - Generuoti visus 5 failus\n";
+        cout << "4 - Nuskaityti is failo\n";
+        cout << "5 - Padalinti i grupes\n";
+        cout << "6 - Isvesti grupes i failus\n";
+        cout << "7 - Spausdinti studentus i ekrana\n";
+        cout << "8 - Automatinis testavimas (5 failai)\n";
         cout << "0 - Baigti\n";
         cout << "Pasirinkimas: ";
         if (!(cin >> p)) {
@@ -127,6 +128,32 @@ int main() {
         if (p == 0) break;
 
         else if (p == 1) {
+            int n;
+            cout << "Kiek studentu? ";
+            cin >> n;
+            for (int i = 0; i < n; i++) {
+                studentas A;
+                cout << "\nVardas: ";
+                cin >> A.var;
+                cout << "Pavarde: ";
+                cin >> A.pav;
+                A.paz.clear();
+                cout << "ND pazymiai (baigti - -1):\n";
+                while (true) {
+                    int x;
+                    cin >> x;
+                    if (x == -1) break;
+                    if (x < 1 || x > 10) { cout << "1-10!\n"; continue; }
+                    A.paz.push_back(x);
+                }
+                cout << "Egzaminas: ";
+                cin >> A.egz;
+                skaiciuoti(A);
+                grupe.push_back(A);
+            }
+        }
+
+        else if (p == 2) {
             string f;
             int n;
             cout << "Failas: ";
@@ -139,11 +166,11 @@ int main() {
             cout << sek(t1, t2) << " s\n";
         }
 
-        else if (p == 2) {
+        else if (p == 3) {
             GeneruotiVisus();
         }
 
-        else if (p == 3) {
+        else if (p == 4) {
             string f;
             cout << "Failas: ";
             cin >> f;
@@ -158,7 +185,7 @@ int main() {
             }
         }
 
-        else if (p == 4) {
+        else if (p == 5) {
             if (grupe.empty()) {
                 cout << "Tuscia.\n";
                 continue;
@@ -172,7 +199,7 @@ int main() {
                  << ", laikas: " << sek(t1, t2) << " s\n";
         }
 
-        else if (p == 5) {
+        else if (p == 6) {
             if (vargsiukai.empty() && kietiakiai.empty()) {
                 cout << "Tuscia.\n";
                 continue;
@@ -184,7 +211,26 @@ int main() {
             cout << sek(t1, t2) << " s\n";
         }
 
-        else if (p == 6) {
+        else if (p == 7) {
+            if (grupe.empty()) {
+                cout << "Tuscia.\n";
+                continue;
+            }
+            if (grupe.size() > 100) {
+                cout << "Demesio: " << grupe.size() << " studentu!\n";
+                cout << "Rekomenduojama naudoti 6 punkta (isvesti i faila).\n";
+                cout << "Tikrai spausdinti? (t/n): ";
+                char k;
+                cin >> k;
+                if (k != 't' && k != 'T') continue;
+            }
+            int lim;
+            cout << "Kiek rodyti (0 = visus)? ";
+            cin >> lim;
+            output(grupe, lim);
+        }
+
+        else if (p == 8) {
             TestuotiVisus(rusRusis);
         }
     }
