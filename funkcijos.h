@@ -8,7 +8,10 @@
 double vidurkis(const std::vector<int>& paz);
 double mediana(std::vector<int> paz);
 void skaiciuoti(studentas& A);
-bool rusiuoti(const studentas& a, const studentas& b);
+
+bool RusiuotiPagalVarda(const studentas& a, const studentas& b);
+bool RusiuotiPagalPavarde(const studentas& a, const studentas& b);
+bool RusiuotiPagalBala(const studentas& a, const studentas& b);
 
 int GeneruotiPazymi();
 studentas GeneruotiStudenta(int numeris);
