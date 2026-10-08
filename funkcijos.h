@@ -5,7 +5,7 @@
 #include <vector>
 #include <string>
 
-double vidurkis(const std::vector<int>& paz);
+double vidurkis(std::vector<int>& paz);
 double mediana(std::vector<int> paz);
 void skaiciuoti(studentas& A);
 
