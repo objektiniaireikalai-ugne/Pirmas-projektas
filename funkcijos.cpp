@@ -152,15 +152,36 @@ void kategorijos(const vector<studentas>& grupe,
                  vector<studentas>& kietiakai) {
     nabageliai.clear();
     kietiakai.clear();
+    
+    nabageliai.reserve(grupe.size());
+    kietiakai.reserve(grupe.size());
 
-    for (int i = 0; i < (int)grupe.size(); i++) {
-        if (grupe[i].galutinis_vidurkis < 5.0) {
-            nabageliai.push_back(grupe[i]);
+    for (const auto &a : grupe) {
+        if (a.galutinis_vidurkis < 5.0) {
+            nabageliai.push_back(a);
         } else {
-            kietiakai.push_back(grupe[i]);
+            kietiakai.push_back(a);
+        }
+    }
+    nabageliai.shrink_to_fit();
+    kietiakai.shrink_to_fit();
+}
+
+void kategorijos(const std::list<studentas>& grupe,
+                 std::list<studentas>& nabageliai,
+                 std::list<studentas>& kietiakai) {
+    nabageliai.clear();
+    kietiakai.clear();
+
+    for (auto it = grupe.begin(); it != grupe.end(); ++it) {
+        if (it->galutinis_vidurkis < 5.0) {
+            nabageliai.push_back(*it);
+        } else {
+            kietiakai.push_back(*it);
         }
     }
 }
+
 
 void IsvestiIFaila(const string& failas, const vector<studentas>& grupe, bool rodytiVid) {
     ofstream out(failas.c_str());
