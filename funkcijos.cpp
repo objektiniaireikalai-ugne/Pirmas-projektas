@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <sstream>
 #include <iostream>
+#include <list>
 
 using namespace std;
 
@@ -118,6 +119,34 @@ bool nuskaitymas(vector<studentas>& grupe, const string& failas) {
     return true;
 }
 
+bool nuskaitymas(std::list<studentas>& grupe, const std::string& failas) {
+    ifstream in(failas.c_str());
+    if (!in) return false;
+
+    grupe.clear();
+    string eilute;
+    getline(in, eilute);
+
+    while (getline(in, eilute)) {
+        if (eilute.empty()) continue;
+        istringstream ss(eilute);
+        studentas A;
+        if (!(ss >> A.var >> A.pav)) continue;
+
+        A.paz.clear();
+        int x;
+        while (ss >> x) A.paz.push_back(x);
+        if (A.paz.size() == 0) continue;
+
+        A.egz = A.paz[A.paz.size() - 1];
+        A.paz.pop_back();
+
+        skaiciuoti(A);
+        grupe.push_back(A);
+    }
+    return true;
+}
+
 void kategorijos(const vector<studentas>& grupe,
                  vector<studentas>& nabageliai,
                  vector<studentas>& kietiakai) {
@@ -132,7 +161,6 @@ void kategorijos(const vector<studentas>& grupe,
         }
     }
 }
-
 
 void IsvestiIFaila(const string& failas, const vector<studentas>& grupe, bool rodytiVid) {
     ofstream out(failas.c_str());
