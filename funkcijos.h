@@ -3,6 +3,7 @@
 
 #include "studentas.h"
 #include <vector>
+#include <list>
 #include <string>
 
 double vidurkis(std::vector<int> paz);
@@ -22,11 +23,20 @@ bool nuskaitymas(std::vector<studentas>& grupe, const std::string& failas);
 
 void kategorijos(const std::vector<studentas>& grupe,
                std::vector<studentas>& vargsiukai,
-               std::vector<studentas>& kietiakiai);
-void IsvestiIFaila(const std::string& failas,
-                   const std::vector<studentas>& grupe,
-                   bool rodytiVid);
+               std::vector<studentas>& kietiakai);
 
-void output(const std::vector<studentas>& grupe, int limit);
+void kategorijos(const std::list<studentas>& grupe,
+                std::list<studentas>& vargsiukai,
+                std::list<studentas>& kietiakai);
+
+void IsvestiIFaila(const std::string& failas,
+                  const std::vector<studentas>& grupe,
+                  bool rodytiVid);
+
+void IsvestiIFaila(const std::string& failas,
+                  const std::list<studentas>& grupe, 
+                  bool rodytiVid);
+
+void output(const std::vector<studentas>& grupe, int limit, bool rodytiVid, bool rodytiMed);
 
 #endif
