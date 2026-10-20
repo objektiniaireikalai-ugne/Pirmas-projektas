@@ -200,6 +200,22 @@ void IsvestiIFaila(const string& failas, const vector<studentas>& grupe, bool ro
     }
 }
 
+void IsvestiIFaila(const std::string& failas, const std::list<studentas>& grupe, bool rodytiVid) {
+    ofstream out(failas.c_str());
+    out << left << setw(16) << "Vardas" << setw(20) << "Pavarde" << right << setw(20) << "Galutinis" << "\n";
+    out << fixed << setprecision(2);
+
+    for (auto it = grupe.begin(); it != grupe.end(); ++it) {
+        out << left << setw(16) << it->var << setw(20) << it->pav << right << setw(20);
+        if (rodytiVid) {
+            out << it->galutinis_vidurkis;
+        } else {
+            out << it->galutinis_mediana;
+        }
+        out << "\n";
+    }
+}
+
 void output(const vector<studentas>& grupe, int limit) {
     cout << left << setw(16) << "Vardas" << setw(20) << "Pavarde";
     cout << right << setw(20) << "Galutinis" << "\n";
