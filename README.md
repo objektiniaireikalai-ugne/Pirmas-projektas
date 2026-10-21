@@ -153,9 +153,9 @@ Pirmoji veikianti programos versija. Duomenų įvedimas ranka, rezultatų skaič
 Testavimas atliktas su 5 skirtingo dydžio failais – 1 000, 10 000, 100 000, 1 000 000 ir 10 000 000 įrašų. Kiekvienas testas kartotas **3 kartus**, pateikiamas **laikų vidurkis**.
 
 ### Testavimo sistemos parametrai:
-- **CPU**: Intel Core i5-1035G1
-- **RAM**: (pvz., 16 GB DDR4)
-- **Diskas**: (pvz., SSD NVMe 512 GB)
+- **CPU**: Intel Core i5-1035G1 @ 1.00GHz
+- **RAM**: 8.0 GB DDR4
+- **Diskas**: SSD NVMe 256 GB
 
 ### Failų generavimo laikai
 
