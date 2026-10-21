@@ -82,24 +82,6 @@ void TestuotiVisus(int rusRusis) {
     }
 }
 
-void GeneruotiVisus() {
-    string failai[] = {
-        "studentai1000.txt",
-        "studentai10000.txt",
-        "studentai100000.txt",
-        "studentai1000000.txt",
-        "studentai10000000.txt"
-    };
-    int kiekiai[] = { 1000, 10000, 100000, 1000000, 10000000 };
-
-    for (int i = 0; i < 5; i++) {
-        auto t1 = steady_clock::now();
-        GeneruotiFaila(failai[i], kiekiai[i]);
-        auto t2 = steady_clock::now();
-        cout << failai[i] << ": " << sek(t1, t2) << " s\n";
-    }
-}
-
 void TestuotiFailaList(const string& failas, int rusRusis, int kartai) {
     double sumN = 0, sumR = 0, sumD = 0, sumV = 0, sumK = 0, sumViso = 0;
     int n = 0;
@@ -163,6 +145,24 @@ void TestuotiVisusList(int rusRusis) {
     };
     for (int i = 0; i < 5; i++) {
         TestuotiFailaList(failai[i], rusRusis, 3);
+    }
+}
+
+void GeneruotiVisus() {
+    string failai[] = {
+        "studentai1000.txt",
+        "studentai10000.txt",
+        "studentai100000.txt",
+        "studentai1000000.txt",
+        "studentai10000000.txt"
+    };
+    int kiekiai[] = { 1000, 10000, 100000, 1000000, 10000000 };
+
+    for (int i = 0; i < 5; i++) {
+        auto t1 = steady_clock::now();
+        GeneruotiFaila(failai[i], kiekiai[i]);
+        auto t2 = steady_clock::now();
+        cout << failai[i] << ": " << sek(t1, t2) << " s\n";
     }
 }
 
@@ -292,18 +292,26 @@ int main() {
                 cin >> k;
                 if (k != 't' && k != 'T') continue;
             }
+
+            int v;
+            cout << "Rodyti: 1 - Vid., 2 - Med., 3 - abu: ";
+            cin >> v;
+            bool rodytiVid = (v == 1 || v == 3);
+            bool rodytiMed = (v == 2 || v == 3);
+
             int lim;
             cout << "Kiek rodyti (0 = visus)? ";
             cin >> lim;
-            output(grupe, lim);
+
+            output(grupe, lim, rodytiVid, rodytiMed);
         }
 
         else if (p == 8) {
             cout << "\n===== TESTAVIMAS SU VECTOR =====\n";
-            testuotiVisus(rusRusis);
-            
+            TestuotiVisus(rusRusis);
+
             cout << "\n===== TESTAVIMAS SU LIST =====\n";
-            testuotiVisusList(rusRusis);
+            TestuotiVisusList(rusRusis);
         }
     }
     return 0;
