@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <list>
 using namespace std;
 using namespace std::chrono;
 
@@ -22,7 +23,7 @@ void TestuotiFaila(const string& failas, int rusRusis, int kartai) {
     int n = 0;
 
     for (int k = 0; k < kartai; k++) {
-        vector<studentas> grupe, vargsiukai, kietiakiai;
+        vector<studentas> grupe, vargsiukai, kietiakai;
 
         auto visoP = steady_clock::now();
 
@@ -41,7 +42,7 @@ void TestuotiFaila(const string& failas, int rusRusis, int kartai) {
         sumR += sek(t3, t4);
 
         auto t5 = steady_clock::now();
-        kategorijos(grupe, vargsiukai, kietiakiai);
+        kategorijos(grupe, vargsiukai, kietiakai);
         auto t6 = steady_clock::now();
         sumD += sek(t5, t6);
 
@@ -51,7 +52,7 @@ void TestuotiFaila(const string& failas, int rusRusis, int kartai) {
         sumV += sek(t7, t8);
 
         auto t9 = steady_clock::now();
-        IsvestiIFaila("kietiakiai_test.txt", kietiakiai, true);
+        IsvestiIFaila("kietiakai_test.txt", kietiakai, true);
         auto t10 = steady_clock::now();
         sumK += sek(t9, t10);
 
@@ -99,8 +100,74 @@ void GeneruotiVisus() {
     }
 }
 
+void TestuotiFailaList(const string& failas, int rusRusis, int kartai) {
+    double sumN = 0, sumR = 0, sumD = 0, sumV = 0, sumK = 0, sumViso = 0;
+    int n = 0;
+
+    for (int k = 0; k < kartai; k++) {
+        list<studentas> grupe, vargsiukai, kietiakai;
+
+        auto visoP = steady_clock::now();
+
+        auto t1 = steady_clock::now();
+        if (!nuskaitymas(grupe, failas)) {
+            cout << failas << " - nerastas\n";
+            return;
+        }
+        auto t2 = steady_clock::now();
+        sumN += sek(t1, t2);
+        n = grupe.size();
+
+        auto t3 = steady_clock::now();
+        if (rusRusis == 1) grupe.sort(RusiuotiPagalVarda);
+        else if (rusRusis == 2) grupe.sort(RusiuotiPagalPavarde);
+        else grupe.sort(RusiuotiPagalBala);
+        auto t4 = steady_clock::now();
+        sumR += sek(t3, t4);
+
+        auto t5 = steady_clock::now();
+        kategorijos(grupe, vargsiukai, kietiakai);
+        auto t6 = steady_clock::now();
+        sumD += sek(t5, t6);
+
+        auto t7 = steady_clock::now();
+        IsvestiIFaila("vargsiukai_test_list.txt", vargsiukai, true);
+        auto t8 = steady_clock::now();
+        sumV += sek(t7, t8);
+
+        auto t9 = steady_clock::now();
+        IsvestiIFaila("kietiakai_test_list.txt", kietiakai, true);
+        auto t10 = steady_clock::now();
+        sumK += sek(t9, t10);
+
+        auto visoPab = steady_clock::now();
+        sumViso += sek(visoP, visoPab);
+    }
+
+    cout << "  [LIST] " << failas << " (" << n << "):\n";
+    cout << "    Nuskaitymas: " << (sumN / kartai) << " s\n";
+    cout << "    Rusiavimas:  " << (sumR / kartai) << " s\n";
+    cout << "    Dalijimas:   " << (sumD / kartai) << " s\n";
+    cout << "    Vargsiuku isvedimas: " << (sumV / kartai) << " s\n";
+    cout << "    Kietiaku isvedimas:  " << (sumK / kartai) << " s\n";
+    cout << "    Viso testo:  " << (sumViso / kartai) << " s\n\n";
+}
+
+void TestuotiVisusList(int rusRusis) {
+    string failai[] = {
+        "studentai1000.txt",
+        "studentai10000.txt",
+        "studentai100000.txt",
+        "studentai1000000.txt",
+        "studentai10000000.txt"
+    };
+    for (int i = 0; i < 5; i++) {
+        TestuotiFailaList(failai[i], rusRusis, 3);
+    }
+}
+
 int main() {
-    vector<studentas> grupe, vargsiukai, kietiakiai;
+    vector<studentas> grupe, vargsiukai, kietiakai;
 
     cout << "Isvesties failus rusiuoti pagal: 1 - varda, 2 - pavarde, 3 - bala: ";
     int rusRusis;
@@ -133,6 +200,7 @@ int main() {
             cin >> n;
             for (int i = 0; i < n; i++) {
                 studentas A;
+                cout << "Naujo studento adresas atmintyje: " << &A << "\n";
                 cout << "\nVardas: ";
                 cin >> A.var;
                 cout << "Pavarde: ";
@@ -192,21 +260,21 @@ int main() {
             }
             auto t1 = steady_clock::now();
             RusiavimoPasirinkimas(grupe, rusRusis);
-            kategorijos(grupe, vargsiukai, kietiakiai);
+            kategorijos(grupe, vargsiukai, kietiakai);
             auto t2 = steady_clock::now();
             cout << "Vargsiukai: " << vargsiukai.size()
-                 << ", kietiakiai: " << kietiakiai.size()
+                 << ", kietiakai: " << kietiakai.size()
                  << ", laikas: " << sek(t1, t2) << " s\n";
         }
 
         else if (p == 6) {
-            if (vargsiukai.empty() && kietiakiai.empty()) {
+            if (vargsiukai.empty() && kietiakai.empty()) {
                 cout << "Tuscia.\n";
                 continue;
             }
             auto t1 = steady_clock::now();
             IsvestiIFaila("vargsiukai.txt", vargsiukai, true);
-            IsvestiIFaila("kietiakiai.txt", kietiakiai, true);
+            IsvestiIFaila("kietiakai.txt", kietiakai, true);
             auto t2 = steady_clock::now();
             cout << sek(t1, t2) << " s\n";
         }
@@ -231,7 +299,11 @@ int main() {
         }
 
         else if (p == 8) {
-            TestuotiVisus(rusRusis);
+            cout << "\n===== TESTAVIMAS SU VECTOR =====\n";
+            testuotiVisus(rusRusis);
+            
+            cout << "\n===== TESTAVIMAS SU LIST =====\n";
+            testuotiVisusList(rusRusis);
         }
     }
     return 0;
