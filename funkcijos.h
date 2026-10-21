@@ -20,6 +20,7 @@ void GeneruotiStudentus(std::vector<studentas>& grupe, int kiek);
 void GeneruotiFaila(const std::string& failas, int kiek);
 
 bool nuskaitymas(std::vector<studentas>& grupe, const std::string& failas);
+bool nuskaitymas(std::list<studentas>& grupe, const std::string& failas);
 
 void kategorijos(const std::vector<studentas>& grupe,
                std::vector<studentas>& vargsiukai,
@@ -34,7 +35,7 @@ void IsvestiIFaila(const std::string& failas,
                   bool rodytiVid);
 
 void IsvestiIFaila(const std::string& failas,
-                  const std::list<studentas>& grupe, 
+                  const std::list<studentas>& grupe,
                   bool rodytiVid);
 
 void output(const std::vector<studentas>& grupe, int limit, bool rodytiVid, bool rodytiMed);
