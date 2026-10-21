@@ -12,7 +12,9 @@ using namespace std;
 double vidurkis(vector<int> paz) {
     if (paz.size() == 0) return 0;
     double s = 0;
-    for (int i = 0; i < paz.size(); i++) s = s + paz[i];
+    for (size_t i = 0; i < paz.size(); i++){
+        s = s + paz[i];
+    }
     return s / paz.size();
 }
 
@@ -129,6 +131,7 @@ bool nuskaitymas(std::list<studentas>& grupe, const std::string& failas) {
 
     while (getline(in, eilute)) {
         if (eilute.empty()) continue;
+
         istringstream ss(eilute);
         studentas A;
         if (!(ss >> A.var >> A.pav)) continue;
@@ -152,7 +155,7 @@ void kategorijos(const vector<studentas>& grupe,
                  vector<studentas>& kietiakai) {
     nabageliai.clear();
     kietiakai.clear();
-    
+
     nabageliai.reserve(grupe.size());
     kietiakai.reserve(grupe.size());
 
@@ -216,11 +219,15 @@ void IsvestiIFaila(const std::string& failas, const std::list<studentas>& grupe,
     }
 }
 
-void output(const vector<studentas>& grupe, int limit) {
+void output(const vector<studentas>& grupe, int limit, bool rodytiVid, bool rodytiMed) {
     cout << left << setw(16) << "Vardas" << setw(20) << "Pavarde";
-    cout << right << setw(20) << "Galutinis" << "\n";
+    if (rodytiVid) cout << right << setw(20) << "Galutinis (Vid.)";
+    if (rodytiMed) cout << right << setw(20) << "Galutinis (Med.)";
+    cout << "\n";
 
-    int br = 56;
+    int br = 36;
+    if (rodytiVid) br += 20;
+    if (rodytiMed) br += 20;
     for (int i = 0; i < br; i++) cout << "-";
     cout << "\n";
 
@@ -230,8 +237,9 @@ void output(const vector<studentas>& grupe, int limit) {
     cout << fixed << setprecision(2);
     for (int i = 0; i < n; i++) {
         cout << left << setw(16) << grupe[i].var
-             << setw(20) << grupe[i].pav
-             << right << setw(20) << grupe[i].galutinis_vidurkis;
+             << setw(20) << grupe[i].pav;
+        if (rodytiVid) cout << right << setw(20) << grupe[i].galutinis_vidurkis;
+        if (rodytiMed) cout << right << setw(20) << grupe[i].galutinis_mediana;
         cout << "\n";
     }
 }
