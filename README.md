@@ -190,7 +190,7 @@ Testavimas atliktas su 5 skirtingo dydžio failais – 1 000, 10 000, 100 000, 1
 
 Tyrimo tikslas – išmatuoti, kaip programos sparta priklauso nuo naudojamo konteinerio.
 
-**Rezultatai su `std::vector`**
+### Rezultatai su `std::vector`
 
 | Įrašai | Nuskaitymas | Rūšiavimas | Dalijimas | Vargšiukų išv. | Kietiakų išv. | Viso |
 |-------:|------------:|-----------:|----------:|---------------:|--------------:|-----:|
@@ -207,15 +207,19 @@ Tyrimo tikslas – išmatuoti, kaip programos sparta priklauso nuo naudojamo kon
 
 | Įrašai | Nuskaitymas | Rūšiavimas | Dalijimas | Vargšiukų išv. | Kietiakų išv. | Viso |
 |-------:|------------:|-----------:|----------:|---------------:|--------------:|-----:|
-| 1 000 | ... | ... | ... | ... | ... | ... |
-| 10 000 | ... | ... | ... | ... | ... | ... |
-| 100 000 | ... | ... | ... | ... | ... | ... |
-| 1 000 000 | ... | ... | ... | ... | ... | ... |
-| 10 000 000 | ... | ... | ... | ... | ... | ... |
+| 1 000 | 0.0062 s | 0.0002 s | 0.0003 s | 0.0018 s | 0.0019 s | 0.0105 s |
+| 10 000 | 0.0604 s | 0.0040 s | 0.0036 s | 0.0069 s | 0.0124 s | 0.0875 s |
+| 100 000 | 0.6077 s | 0.0683 s | 0.0471 s | 0.0650 s | 0.1065 s | 0.8949 s |
+| 1 000 000 | 7.6566 s | 1.0397 s | 0.6317 s | 0.7147 s | 0.9549 s | 10.998 s |
+| 10 000 000 | 55.090 s | 12.360 s | 7.7955 s | 6.9762 s | 11.069 s | 93.291 s |
+
+<img width="417" height="610" alt="list1" src="https://github.com/user-attachments/assets/99ed24ce-732c-4d9d-b575-b1d297377b98" />
+<img width="450" height="375" alt="list2" src="https://github.com/user-attachments/assets/43a730d5-a7d7-4bcb-8734-41b99d72c377" />
 
 ### Išvados
 
-- **Nuskaitymas** – abu konteineriai veikia panašiai, nes failo skaitymas priklauso nuo disko, o ne nuo konteinerio.
-- **Rūšiavimas** – `std::vector` yra žymiai greitesnis, nes naudoja `std::sort`, kuris remiasi tiesiogine prieiga prie elementų. `std::list` naudoja `list.sort()`, kuris neturi tiesioginės prieigos, todėl yra lėtesnis.
-- **Dalijimas į grupes** – `vector` greitesnis, nes elementai atmintyje išdėstyti ištisai (geriau veikia procesoriaus podėlis / cache).
-- **Išvedimas į failus** – skirtumas nedidelis, nes abu naudoja failų sistemą.
+- **Nuskaitymas iš failo** – abu konteineriai veikia beveik identiškai, nes duomenų skaitymas labiausiai priklauso nuo disko (SSD) greičio, o ne nuo konteinerio tipo.
+- **Rūšiavimas** – tai pati įdomiausia vieta. Su mažesniais duomenų kiekiais `std::vector` rūšiuoja greičiau. Tačiau su 10 000 000 įrašų `std::list` rūšiavimas (12.36 s) buvo **ženkliai greitesnis** nei `std::vector` (18.60 s). Tai nutinka todėl, kad mūsų `studentas` struktūra yra „sunki“ (turi du `string` ir vieną `vector`). `std::sort` (vector atveju) turi fiziškai perkelti visus šiuos didelius objektus atmintyje, o `std::list::sort` tiesiog sukeičia rodykles (pointerius) į atminties vietas. Esant dideliam duomenų kiekiui, rodyklių perstūmimas pasirodė efektyvesnis už objektų kopijavimą.
+- **Dalijimas į grupes** – `std::list` taip pat buvo šiek tiek greitesnis (7.79 s prieš 9.07 s), nes dalijimo metu vėlgi perkėlinėjami rodyklės, o ne fiziškai kopijuojami dideli struktūros objektai.
+- **Išvedimas į failus** – `std::vector` veikė šiek tiek greičiau (mažiau laiko sąnaudų ieškant elemento, nes jie atmintyje guli ištisai), bet skirtumas nedidelis.
+- **Bendras laikas** – nors `vector` yra greitesnis su mažais duomenimis, su 10M įrašų `std::list` bendrai apdorojo duomenis greičiau (93.29 s prieš 100.89 s) dėl sparčiau atlikto rūšiavimo.
