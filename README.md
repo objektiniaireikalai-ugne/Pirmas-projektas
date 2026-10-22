@@ -190,15 +190,18 @@ Testavimas atliktas su 5 skirtingo dydžio failais – 1 000, 10 000, 100 000, 1
 
 Tyrimo tikslas – išmatuoti, kaip programos sparta priklauso nuo naudojamo konteinerio.
 
-### Rezultatai su `std::vector`
+**Rezultatai su `std::vector`**
 
 | Įrašai | Nuskaitymas | Rūšiavimas | Dalijimas | Vargšiukų išv. | Kietiakų išv. | Viso |
 |-------:|------------:|-----------:|----------:|---------------:|--------------:|-----:|
-| 1 000 | ... | ... | ... | ... | ... | ... |
-| 10 000 | ... | ... | ... | ... | ... | ... |
-| 100 000 | ... | ... | ... | ... | ... | ... |
-| 1 000 000 | ... | ... | ... | ... | ... | ... |
-| 10 000 000 | ... | ... | ... | ... | ... | ... |
+| 1 000 | 0.0065 s | 0.0008 s | 0.0003 s | 0.0015 s | 0.0013 s | 0.0107 s |
+| 10 000 | 0.0528 s | 0.0082 s | 0.0030 s | 0.0062 s | 0.0074 s | 0.0779 s |
+| 100 000 | 0.4986 s | 0.0876 s | 0.0346 s | 0.0531 s | 0.0784 s | 0.7525 s |
+| 1 000 000 | 5.6337 s | 1.4595 s | 0.4262 s | 0.6961 s | 1.0415 s | 9.2573 s |
+| 10 000 000 | 55.493 s | 18.600 s | 9.0731 s | 7.3728 s | 10.351 s | 100.891 s |
+
+<img width="391" height="594" alt="vector1" src="https://github.com/user-attachments/assets/0a09e056-b76c-4b84-8a4c-d473ab7af64b" />
+<img width="376" height="382" alt="vector2" src="https://github.com/user-attachments/assets/1f19fb97-f26e-4517-9f8f-5d37867a60f5" />
 
 ### Rezultatai su `std::list`
 
@@ -216,7 +219,3 @@ Tyrimo tikslas – išmatuoti, kaip programos sparta priklauso nuo naudojamo kon
 - **Rūšiavimas** – `std::vector` yra žymiai greitesnis, nes naudoja `std::sort`, kuris remiasi tiesiogine prieiga prie elementų. `std::list` naudoja `list.sort()`, kuris neturi tiesioginės prieigos, todėl yra lėtesnis.
 - **Dalijimas į grupes** – `vector` greitesnis, nes elementai atmintyje išdėstyti ištisai (geriau veikia procesoriaus podėlis / cache).
 - **Išvedimas į failus** – skirtumas nedidelis, nes abu naudoja failų sistemą.
-
-(Čia įklijuok ekrano nuotraukas su matavimais)
-![Vector testavimas](nuotrauka1.png)
-![List testavimas](nuotrauka2.png)
