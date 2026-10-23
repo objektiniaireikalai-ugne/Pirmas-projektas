@@ -150,7 +150,7 @@ bool nuskaitymas(std::list<studentas>& grupe, const std::string& failas) {
     return true;
 }
 
-void kategorijos(const vector<studentas>& grupe,
+void kategorijos(vector<studentas>& grupe,
                  vector<studentas>& nabageliai,
                  vector<studentas>& kietiakai) {
     nabageliai.clear();
@@ -168,6 +168,9 @@ void kategorijos(const vector<studentas>& grupe,
     }
     nabageliai.shrink_to_fit();
     kietiakai.shrink_to_fit();
+
+    grupe.clear();
+    grupe.shrink_to_fit();
 }
 
 void kategorijos(const std::list<studentas>& grupe,
