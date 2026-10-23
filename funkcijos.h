@@ -22,7 +22,7 @@ void GeneruotiFaila(const std::string& failas, int kiek);
 bool nuskaitymas(std::vector<studentas>& grupe, const std::string& failas);
 bool nuskaitymas(std::list<studentas>& grupe, const std::string& failas);
 
-void kategorijos(const std::vector<studentas>& grupe,
+void kategorijos(std::vector<studentas>& grupe,
                std::vector<studentas>& vargsiukai,
                std::vector<studentas>& kietiakai);
 
