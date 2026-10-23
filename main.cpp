@@ -195,12 +195,18 @@ int main() {
         if (p == 0) break;
 
         else if (p == 1) {
+            cout << "I kuri konteineri vesti? 1 - Vector, 2 - List: ";
+            int konteineris;
+            cin >> konteineris;
+
             int n;
             cout << "Kiek studentu? ";
             cin >> n;
+
+            list<studentas> listGrupe;
+
             for (int i = 0; i < n; i++) {
                 studentas A;
-                cout << "Naujo studento adresas atmintyje: " << &A << "\n";
                 cout << "\nVardas: ";
                 cin >> A.var;
                 cout << "Pavarde: ";
@@ -217,7 +223,14 @@ int main() {
                 cout << "Egzaminas: ";
                 cin >> A.egz;
                 skaiciuoti(A);
-                grupe.push_back(A);
+
+                if (konteineris == 1) {
+                    grupe.push_back(A);
+                    cout << "Studento (Vector) saugojimo atmintyje adresas: " << &grupe.back() << "\n";
+                } else {
+                    listGrupe.push_back(A);
+                    cout << "Studento (List) saugojimo atmintyje adresas: " << &listGrupe.back() << "\n";
+                }
             }
         }
 
