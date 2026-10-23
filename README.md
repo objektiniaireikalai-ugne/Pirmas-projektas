@@ -200,9 +200,6 @@ Tyrimo tikslas – išmatuoti, kaip programos sparta priklauso nuo naudojamo kon
 | 1 000 000 | 5.6337 s | 1.4595 s | 0.4262 s | 0.6961 s | 1.0415 s | 9.2573 s |
 | 10 000 000 | 55.493 s | 18.600 s | 9.0731 s | 7.3728 s | 10.351 s | 100.891 s |
 
-<img width="391" height="594" alt="vector1" src="https://github.com/user-attachments/assets/0a09e056-b76c-4b84-8a4c-d473ab7af64b" />
-<img width="376" height="382" alt="vector2" src="https://github.com/user-attachments/assets/1f19fb97-f26e-4517-9f8f-5d37867a60f5" />
-
 ### Rezultatai su `std::list`
 
 | Įrašai | Nuskaitymas | Rūšiavimas | Dalijimas | Vargšiukų išv. | Kietiakų išv. | Viso |
@@ -213,6 +210,8 @@ Tyrimo tikslas – išmatuoti, kaip programos sparta priklauso nuo naudojamo kon
 | 1 000 000 | 7.6566 s | 1.0397 s | 0.6317 s | 0.7147 s | 0.9549 s | 10.998 s |
 | 10 000 000 | 55.090 s | 12.360 s | 7.7955 s | 6.9762 s | 11.069 s | 93.291 s |
 
+<img width="391" height="594" alt="vector1" src="https://github.com/user-attachments/assets/0a09e056-b76c-4b84-8a4c-d473ab7af64b" />
+<img width="376" height="382" alt="vector2" src="https://github.com/user-attachments/assets/1f19fb97-f26e-4517-9f8f-5d37867a60f5" />
 <img width="417" height="610" alt="list1" src="https://github.com/user-attachments/assets/99ed24ce-732c-4d9d-b575-b1d297377b98" />
 <img width="450" height="375" alt="list2" src="https://github.com/user-attachments/assets/43a730d5-a7d7-4bcb-8734-41b99d72c377" />
 
