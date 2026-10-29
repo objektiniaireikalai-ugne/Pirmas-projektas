@@ -274,3 +274,27 @@ void split_1_list(list<studentas>& grupe, list<studentas>& v, list<studentas>& k
         }
     }
 }
+
+void split_2_vector(vector<studentas>& grupe, vector<studentas>& v) {
+    v.clear();
+    for (auto it = grupe.begin(); it != grupe.end(); ) {
+        if (it->galutinis_vidurkis < 5.0) {
+            v.push_back(*it);       
+            it = grupe.erase(it);   
+        } else {
+            ++it;                  
+        }
+    }
+}
+
+void split_2_list(list<studentas>& grupe, list<studentas>& v) {
+    v.clear();
+    for (auto it = grupe.begin(); it != grupe.end(); ) {
+        if (it->galutinis_vidurkis < 5.0) {
+            v.push_back(*it);       
+            it = grupe.erase(it);  
+        } else {
+            ++it;
+        }
+    }
+}
