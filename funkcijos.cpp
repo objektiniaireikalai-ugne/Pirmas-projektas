@@ -246,3 +246,31 @@ void output(const vector<studentas>& grupe, int limit, bool rodytiVid, bool rody
         cout << "\n";
     }
 }
+
+void split_1_vector(vector<studentas>& grupe, vector<studentas>& v, vector<studentas>& k) {
+    v.clear(); 
+    k.clear();
+    v.reserve(grupe.size()); 
+    k.reserve(grupe.size());
+    
+    for (const auto& a : grupe) {
+        if (a.galutinis_vidurkis < 5.0) {
+            v.push_back(a); 
+        } else {
+            k.push_back(a);
+        }
+    }
+}
+
+void split_1_list(list<studentas>& grupe, list<studentas>& v, list<studentas>& k) {
+    v.clear(); 
+    k.clear();
+    
+    for (auto it = grupe.begin(); it != grupe.end(); ++it) {
+        if (it->galutinis_vidurkis < 5.0) {
+            v.push_back(*it); 
+        } else {
+            k.push_back(*it); 
+        }
+    }
+}
