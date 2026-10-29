@@ -43,4 +43,7 @@ void output(const std::vector<studentas>& grupe, int limit, bool rodytiVid, bool
 void split_1_vector(std::vector<studentas>& grupe, std::vector<studentas>& v, std::vector<studentas>& k);
 void split_1_list(std::list<studentas>& grupe, std::list<studentas>& v, std::list<studentas>& k);
 
+void split_2_vector(std::vector<studentas>& grupe, std::vector<studentas>& v);
+void split_2_list(std::list<studentas>& grupe, std::list<studentas>& v);
+
 #endif
