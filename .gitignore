@@ -67,3 +67,17 @@ vcpkg_installed/
 # test output & cache
 Testing/
 .cache/
+
+# Code::Blocks IDE files
+*.cbp
+*.depend
+*.layout
+*.cbt
+obj/
+bin/
+
+# Programos sugeneruoti rezultatu failai
+vargsiukai.txt
+kietiakiai.txt
+vargsiukai_test.txt
+kietiakiai_test.txt
