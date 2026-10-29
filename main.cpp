@@ -242,6 +242,7 @@ int main() {
         cout << "6 - Isvesti grupes i failus\n";
         cout << "7 - Spausdinti studentus i ekrana\n";
         cout << "8 - Automatinis testavimas (5 failai)\n";
+        cout << "9 - Testuoti dalijimo strategijas\n";
         cout << "0 - Baigti\n";
         cout << "Pasirinkimas: ";
         if (!(cin >> p)) {
@@ -383,6 +384,9 @@ int main() {
 
             cout << "\n===== TESTAVIMAS SU LIST =====\n";
             TestuotiVisusList(rusRusis);
+        }
+        else if (p == 9) {
+            TestuotiStrategijas();
         }
     }
     return 0;
