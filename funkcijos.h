@@ -40,4 +40,7 @@ void IsvestiIFaila(const std::string& failas,
 
 void output(const std::vector<studentas>& grupe, int limit, bool rodytiVid, bool rodytiMed);
 
+void split_1_vector(std::vector<studentas>& grupe, std::vector<studentas>& v, std::vector<studentas>& k);
+void split_1_list(std::list<studentas>& grupe, std::list<studentas>& v, std::list<studentas>& k);
+
 #endif
