@@ -298,3 +298,25 @@ void split_2_list(list<studentas>& grupe, list<studentas>& v) {
         }
     }
 }
+
+void split_3_vector(vector<studentas>& grupe, vector<studentas>& v) {
+    v.clear();
+    auto it = std::partition(grupe.begin(), grupe.end(), [](const studentas& a) {
+        return a.galutinis_vidurkis < 5.0;
+    });
+    
+    v.assign(grupe.begin(), it);   
+    grupe.erase(grupe.begin(), it);    
+}
+
+void split_3_list(list<studentas>& grupe, list<studentas>& v) {
+    v.clear();
+    auto it = grupe.begin();
+    while (it != grupe.end()) {
+        if (it->galutinis_vidurkis < 5.0) {
+            v.splice(v.end(), grupe, it++); 
+        } else {
+            ++it;
+        }
+    }
+}
