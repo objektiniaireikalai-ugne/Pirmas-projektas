@@ -166,6 +166,64 @@ void GeneruotiVisus() {
     }
 }
 
+void TestuotiStrategijas() {
+    cout << "\n===== DALIJIMO STRATEGIJU TESTAVIMAS =====\n";
+    string failai[] = {
+        "studentai1000.txt", 
+        "studentai10000.txt", 
+        "studentai100000.txt", 
+        "studentai1000000.txt", 
+        "studentai10000000.txt"
+    };
+    
+    for (int f = 0; f < 5; f++) {
+        cout << "\n--- Failas: " << failai[f] << " ---\n";  
+        {
+            vector<studentas> grupe, v, k;
+            if(nuskaitymas(grupe, failai[f])) {
+                auto t1 = steady_clock::now();
+                split_1_vector(grupe, v, k);
+                auto t2 = steady_clock::now();
+                cout << "[Vector] 1 Strategija: " << sek(t1, t2) << " s\n";
+
+                vector<studentas> grupe2 = grupe;
+                t1 = steady_clock::now();
+                split_2_vector(grupe2, v);
+                t2 = steady_clock::now();
+                cout << "[Vector] 2 Strategija: " << sek(t1, t2) << " s\n";
+
+                vector<studentas> grupe3 = grupe;
+                t1 = steady_clock::now();
+                split_3_vector(grupe3, v);
+                t2 = steady_clock::now();
+                cout << "[Vector] 3 Strategija: " << sek(t1, t2) << " s\n";
+            }
+        }
+
+        {
+            list<studentas> grupe, v, k;
+            if(nuskaitymas(grupe, failai[f])) {
+                auto t1 = steady_clock::now();
+                split_1_list(grupe, v, k);
+                auto t2 = steady_clock::now();
+                cout << "[List] 1 Strategija: " << sek(t1, t2) << " s\n";
+
+                list<studentas> grupe2 = grupe;
+                t1 = steady_clock::now();
+                split_2_list(grupe2, v);
+                t2 = steady_clock::now();
+                cout << "[List] 2 Strategija: " << sek(t1, t2) << " s\n";
+
+                list<studentas> grupe3 = grupe;
+                t1 = steady_clock::now();
+                split_3_list(grupe3, v);
+                t2 = steady_clock::now();
+                cout << "[List] 3 Strategija: " << sek(t1, t2) << " s\n";
+            }
+        }
+    }
+}
+
 int main() {
     vector<studentas> grupe, vargsiukai, kietiakai;
 
