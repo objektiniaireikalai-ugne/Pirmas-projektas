@@ -46,4 +46,7 @@ void split_1_list(std::list<studentas>& grupe, std::list<studentas>& v, std::lis
 void split_2_vector(std::vector<studentas>& grupe, std::vector<studentas>& v);
 void split_2_list(std::list<studentas>& grupe, std::list<studentas>& v);
 
+void split_3_vector(std::vector<studentas>& grupe, std::vector<studentas>& v);
+void split_3_list(std::list<studentas>& grupe, std::list<studentas>& v);
+
 #endif
