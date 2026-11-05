@@ -279,8 +279,7 @@ Studentai, kurių balas < 5.0, yra nukopijuojami į `vargsiukai` konteinerį ir 
 | 1 000 000 | 0.31070 s | 0.20922 s | 0.09863 s |
 | 10 000 000 | 5.18789 s | 12.5937 s | 17.2927 s |
 
-<img width="540" height="804" alt="13896b4e-0276-4802-8710-fdda7c7c5dcf" src="https://github.com/user-attachments/assets/a111a1bf-aff8-412f-8bfc-85ef58aadd7f" />
-<img width="537" height="181" alt="2375c9e0-3588-4d43-b012-ee50e6fa2a8d" src="https://github.com/user-attachments/assets/b8b09416-6ce4-4ea8-95a1-5c236c3ca0cc" />
+<img width="342" height="625" alt="testas" src="https://github.com/user-attachments/assets/aa4cb72b-c9fe-4525-a30e-daf0891eec71" />
 
 ### Išvados
 
