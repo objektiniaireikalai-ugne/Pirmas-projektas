@@ -222,3 +222,34 @@ Tyrimo tikslas – išmatuoti, kaip programos sparta priklauso nuo naudojamo kon
 - **Dalijimas į grupes** – `std::list` taip pat buvo šiek tiek greitesnis (7.79 s prieš 9.07 s), nes dalijimo metu vėlgi perkėlinėjami rodyklės, o ne fiziškai kopijuojami dideli struktūros objektai.
 - **Išvedimas į failus** – `std::vector` veikė šiek tiek greičiau (mažiau laiko sąnaudų ieškant elemento, nes jie atmintyje guli ištisai), bet skirtumas nedidelis.
 - **Bendras laikas** – nors `vector` yra greitesnis su mažais duomenimis, su 10M įrašų `std::list` bendrai apdorojo duomenis greičiau (93.29 s prieš 100.89 s) dėl sparčiau atlikto rūšiavimo.
+
+## v1.0 – Dalijimo strategijų optimizavimas
+
+Buvo išbandytos trys studentų dalijimo į dvi kategorijas strategijos, naudojant `std::vector` ir `std::list` konteinerius.
+
+- **1 strategija:** Du nauji konteineriai (originalas lieka nepakitęs). Neefektyvi atmintiai.
+- **2 strategija:** Vienas naujas konteineris ir trynimas iš originalo. 
+- **3 strategija:** Optimizuota naudojant STL algoritmus (`std::partition` vektoriui ir `list::splice` listui).
+
+### Rezultatai su `std::vector`
+
+| Įrašai | 1 strategija | 2 strategija | 3 strategija |
+|-------:|-------------:|-------------:|-------------:|
+| 1 000 | 0.00027 s | 0.01214 s | 0.00017 s |
+| 10 000 | 0.00159 s | 1.28152 s | 0.00281 s |
+| 100 000 | 0.01970 s | **176.905 s** | 0.02174 s |
+| 1 000 000 | 0.21311 s | *(praleista)* | 0.20879 s |
+| 10 000 000 | 2.82685 s | *(praleista)* | 15.2007 s |
+
+### Rezultatai su `std::list`
+
+| Įrašai | 1 strategija | 2 strategija | 3 strategija |
+|-------:|-------------:|-------------:|-------------:|
+| 1 000 | 0.00034 s | 0.00017 s | 0.00008 s |
+| 10 000 | 0.00306 s | 0.00440 s | 0.00174 s |
+| 100 000 | 0.03161 s | 0.02433 s | 0.01066 s |
+| 1 000 000 | 0.35535 s | 0.19794 s | 0.10255 s |
+| 10 000 000 | 7.01909 s | 18.0246 s | 22.3624 s |
+
+<img width="540" height="804" alt="13896b4e-0276-4802-8710-fdda7c7c5dcf" src="https://github.com/user-attachments/assets/a111a1bf-aff8-412f-8bfc-85ef58aadd7f" />
+<img width="537" height="181" alt="2375c9e0-3588-4d43-b012-ee50e6fa2a8d" src="https://github.com/user-attachments/assets/b8b09416-6ce4-4ea8-95a1-5c236c3ca0cc" />
