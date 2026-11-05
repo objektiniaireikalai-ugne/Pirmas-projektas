@@ -16,21 +16,29 @@ Objektinio programavimo kurso darbas. Programa leidžia surinkti studentų namų
 - [Versijos (releases)](#versijos-releases)
 - [Efektyvumo tyrimai](#efektyvumo-tyrimai)
 
-### Diegimas naudojant CMake (Windows aplinkoje su MinGW)
+## Diegimas ir paleidimas
 
-Kadangi naudojama Windows operacinė sistema ir MinGW kompiliatorius (per Code::Blocks), projekto kompiliavimas atliekamas taip:
+Projektas naudoja **CMake (3.16 ar naujesnę versiją)** ir reikalauja **C++17** standarto kompiliatoriaus (GCC, Clang arba MSVC).
 
-1. Atidarykite terminalą (pvz., `cmd`) projekto šakniniame aplanke.
-2. Įvykdykite šias komandas:
-   ```cmd
-   mkdir build
-   cd build
-   cmake -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER="C:/Program Files/CodeBlocks/MinGW/bin/g++.exe" ..
-   cmake --build .
-   ```
-3. Paleiskite programą:
-   ```cmd
-   programa.exe
+Sukompiliuoti programą galima šiomis komandomis:
+
+```bash
+cmake -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build
+```
+
+Paleidimas:
+- Windows: `.\build\programa.exe`
+- Linux / macOS: `./build/programa`
+
+**Windows aplinkos ypatumai:**
+
+- Jei terminalas neranda kompiliatoriaus (`g++`), galite nurodyti kelią iki Code::Blocks MinGW kompiliatoriaus tiesiogiai:
+
+```bash
+cmake -B build -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER="C:/Program Files/CodeBlocks/MinGW/bin/g++.exe" -DCMAKE_BUILD_TYPE=Release
+```
+- Jei paleidus programą pranešama apie trūkstamus `.dll` failus, nukopijuokite `libstdc++-6.dll`, `libgcc_s_seh-1.dll` ir `libwinpthread-1.dll` iš `C:\Program Files\CodeBlocks\MinGW\bin` katalogo į `build` aplanką.
    
 ## Naudojimas
 
