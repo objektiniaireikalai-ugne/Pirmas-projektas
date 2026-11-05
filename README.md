@@ -225,11 +225,25 @@ Tyrimo tikslas – išmatuoti, kaip programos sparta priklauso nuo naudojamo kon
 
 ## v1.0 – Dalijimo strategijų optimizavimas
 
-Buvo išbandytos trys studentų dalijimo į dvi kategorijas strategijos, naudojant `std::vector` ir `std::list` konteinerius.
+### Strategijų aprašymas
 
-- **1 strategija:** Du nauji konteineriai (originalas lieka nepakitęs). Neefektyvi atmintiai.
-- **2 strategija:** Vienas naujas konteineris ir trynimas iš originalo. 
-- **3 strategija:** Optimizuota naudojant STL algoritmus (`std::partition` vektoriui ir `list::splice` listui).
+Tyrimo metu buvo realizuotos ir palygintos trys skirtingos studentų dalijimo į dvi kategorijas strategijos:
+
+**1 strategija (Du nauji konteineriai):**
+Studentai yra tiesiog nukopijuojami iš pradinio konteinerio į du naujus: `vargsiukai` ir `kietiakiai`. Pradinis konteineris lieka nepakitęs. 
+*Šios strategijos trūkumas:* Ji yra neefektyvi atminties atžvilgiu, nes kiekvienas studentas atmintyje egzistuoja du kartus (originaliame sąraše ir viename iš naujų).
+
+**2 strategija (Vienas naujas konteineris ir trynimas):**
+Studentai, kurių balas < 5.0, yra nukopijuojami į `vargsiukai` konteinerį ir **ištrinami** iš pradinio. Po šio veiksmo pradiniame konteineryje lieka tik kietiakiai. 
+*Šios strategijos privalumas:* Efektyvus atminties naudojimas. 
+*Trūkumas:* Trynimas (`erase`) yra labai „skausmingas“ `std::vector` konteineriui, nes ištrinus elementą, visi likę elementai turi būti pastumti atmintyje. Tuo tarpu `std::list` trynimą atlieka akimirksniu.
+
+**3 strategija (Optimizuota su STL algoritmais):**
+Ši strategija – tai 2 strategijos patobulinimas, panaudojant efektyvius C++ standartinės bibliotekos (STL) algoritmus.
+*   **`std::vector` atveju:** Panaudotas `std::partition` algoritmas, kuris per vieną ėjimą (O(N)) suskirsto vektorių į dvi dalis (vargšiukus priekyje, kietiakius gale). Tada vargsiukai nukopijuojami ir ištrinami vienu `erase` metodu. Tai leidžia išvengti lėto trynimo ciklo viduje.
+*   **`std::list` atveju:** Panaudotas specialus `splice` metodas, kuris „perkelia“ atminties mazgus iš vieno sąrašo į kitą net nekopijuodamas studentų duomenų. Tai užima O(1) laiko.
+
+### Testavimo rezultatai
 
 ### Rezultatai su `std::vector`
 
@@ -253,3 +267,17 @@ Buvo išbandytos trys studentų dalijimo į dvi kategorijas strategijos, naudoja
 
 <img width="540" height="804" alt="13896b4e-0276-4802-8710-fdda7c7c5dcf" src="https://github.com/user-attachments/assets/a111a1bf-aff8-412f-8bfc-85ef58aadd7f" />
 <img width="537" height="181" alt="2375c9e0-3588-4d43-b012-ee50e6fa2a8d" src="https://github.com/user-attachments/assets/b8b09416-6ce4-4ea8-95a1-5c236c3ca0cc" />
+
+### Išvados
+
+1. **Kodėl `Vector` 2 strategija yra katastrofiška?** 
+   `std::vector` atmintyje elementus laiko ištisai. Ištrinant elementą iš vidurio, kompiuteris turi fiziškai pastumti visus likusius elementus į kairę (O(N) sudėtingumas). Su 100 000 įrašų tai užtruko 176 sekundes, todėl su 1 000 000 būtų užtrukę valandas. Ši strategija vektoriui yra visiškai netinkama.
+
+2. **Kodėl `List` yra greitas?** 
+   `std::list` elementai sujungti rodyklėmis. Ištrynus elementą, tiesiog panaikinama rodyklė (O(1) sudėtingumas). Todėl net ir su dideliais duomenų kiekiais 2 strategija liste veikia akimirksniu.
+
+3. **Netikėtas rezultatas su 10 milijonų įrašų:** 
+   Su 10M įrašų `[Vector] 1 strategija` (kopijavimas) buvo greitesnė už 3 strategiją. Tai paaiškinama procesoriaus cache atmintimi – nuoseklus duomenų kopijavimas yra labai optimizuotas, o `std::partition` atlieka daug vietos keitimų, kurie su milžinišku duomenų kiekiu sukelia daug cache praleidimų. Taip pat listo 3 strategija su 10M tapo lėčiausia (22.36 s) dėl tos pačios priežasties – rodyklių „vaikymasis“ išmėtytoje atmintyje yra lėtas.
+
+4. **Bendras optimizavimas:** 
+   Jei duomenų nedaug (iki 100k), 3 strategija yra akivaizdžiai geriausia. Jei duomenų milžiniškas kiekis ir reikia taupyti laiką, gali būti, kad paprastas duomenų kopijavimas (1 strategija) laimės prieš sudėtingus algoritmus. Tai parodo, kad optimizavimas visada turi būti pagrįstas testavimu, o ne aklu algoritmų naudojimu.
