@@ -16,20 +16,22 @@ Objektinio programavimo kurso darbas. Programa leidžia surinkti studentų namų
 - [Versijos (releases)](#versijos-releases)
 - [Efektyvumo tyrimai](#efektyvumo-tyrimai)
 
-## Reikalavimai ir paleidimas
+### Diegimas naudojant CMake (Windows aplinkoje su MinGW)
 
-Norint sukompiliuoti ir paleisti programą, reikalingas C++ kompiliatorius (palaikantis C++17 standartą, pvz., GCC, Clang, MSVC) ir **CMake** įrankis.
+Kadangi naudojama Windows operacinė sistema ir MinGW kompiliatorius (per Code::Blocks), projekto kompiliavimas atliekamas taip:
 
-### Diegimas naudojant CMake (Bet kuriai OS)
-
-1. Nuklonuokite repozitoriją arba atsisiųskite ją kaip ZIP failą.
-2. Terminale (arba komandinėje eilutėje) atidarykite projekto aplanką ir įvykdykite šias komandas:
-   ```bash
+1. Atidarykite terminalą (pvz., `cmd`) projekto šakniniame aplanke.
+2. Įvykdykite šias komandas:
+   ```cmd
    mkdir build
    cd build
-   cmake ..
-   cmake --build . --config Release
-
+   cmake -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER="C:/Program Files/CodeBlocks/MinGW/bin/g++.exe" ..
+   cmake --build .
+   ```
+3. Paleiskite programą:
+   ```cmd
+   programa.exe
+   
 ## Naudojimas
 
 Paleidus programą rodomas meniu:
