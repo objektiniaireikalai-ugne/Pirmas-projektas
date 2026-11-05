@@ -259,25 +259,25 @@ Studentai, kurių balas < 5.0, yra nukopijuojami į `vargsiukai` konteinerį ir 
 
 ### Testavimo rezultatai
 
-### Rezultatai su `std::vector`
+**Rezultatai su `std::vector`**
 
 | Įrašai | 1 strategija | 2 strategija | 3 strategija |
 |-------:|-------------:|-------------:|-------------:|
-| 1 000 | 0.00027 s | 0.01214 s | 0.00017 s |
-| 10 000 | 0.00159 s | 1.28152 s | 0.00281 s |
-| 100 000 | 0.01970 s | **176.905 s** | 0.02174 s |
-| 1 000 000 | 0.21311 s | *(praleista)* | 0.20879 s |
-| 10 000 000 | 2.82685 s | *(praleista)* | 15.2007 s |
+| 1 000 | 0.00026 s | 0.01194 s | 0.00015 s |
+| 10 000 | 0.00214 s | 1.11708 s | 0.00278 s |
+| 100 000 | 0.01993 s | **117.681 s** | 0.01989 s |
+| 1 000 000 | 0.18632 s | *(praleista)* | 0.21806 s |
+| 10 000 000 | 2.72218 s | *(praleista)* | 11.7826 s |
 
-### Rezultatai su `std::list`
+**Rezultatai su `std::list`**
 
 | Įrašai | 1 strategija | 2 strategija | 3 strategija |
 |-------:|-------------:|-------------:|-------------:|
-| 1 000 | 0.00034 s | 0.00017 s | 0.00008 s |
-| 10 000 | 0.00306 s | 0.00440 s | 0.00174 s |
-| 100 000 | 0.03161 s | 0.02433 s | 0.01066 s |
-| 1 000 000 | 0.35535 s | 0.19794 s | 0.10255 s |
-| 10 000 000 | 7.01909 s | 18.0246 s | 22.3624 s |
+| 1 000 | 0.00057 s | 0.00017 s | 0.00009 s |
+| 10 000 | 0.00312 s | 0.00293 s | 0.00131 s |
+| 100 000 | 0.02862 s | 0.01920 s | 0.00947 s |
+| 1 000 000 | 0.31070 s | 0.20922 s | 0.09863 s |
+| 10 000 000 | 5.18789 s | 12.5937 s | 17.2927 s |
 
 <img width="540" height="804" alt="13896b4e-0276-4802-8710-fdda7c7c5dcf" src="https://github.com/user-attachments/assets/a111a1bf-aff8-412f-8bfc-85ef58aadd7f" />
 <img width="537" height="181" alt="2375c9e0-3588-4d43-b012-ee50e6fa2a8d" src="https://github.com/user-attachments/assets/b8b09416-6ce4-4ea8-95a1-5c236c3ca0cc" />
@@ -285,13 +285,15 @@ Studentai, kurių balas < 5.0, yra nukopijuojami į `vargsiukai` konteinerį ir 
 ### Išvados
 
 1. **Kodėl `Vector` 2 strategija yra katastrofiška?** 
-   `std::vector` atmintyje elementus laiko ištisai. Ištrinant elementą iš vidurio, kompiuteris turi fiziškai pastumti visus likusius elementus į kairę (O(N) sudėtingumas). Su 100 000 įrašų tai užtruko 176 sekundes, todėl su 1 000 000 būtų užtrukę valandas. Ši strategija vektoriui yra visiškai netinkama.
+   `std::vector` atmintyje elementus laiko ištisai. Ištrinant elementą iš vidurio, kompiuteris turi fiziškai pastumti visus likusius elementus į kairę (O(N) sudėtingumas). Su 100 000 įrašų tai užtruko beveik 118 sekundžių, todėl su 1 000 000 būtų užtrukę valandas. Ši strategija vektoriui yra visiškai netinkama.
 
-2. **Kodėl `List` yra greitas?** 
-   `std::list` elementai sujungti rodyklėmis. Ištrynus elementą, tiesiog panaikinama rodyklė (O(1) sudėtingumas). Todėl net ir su dideliais duomenų kiekiais 2 strategija liste veikia akimirksniu.
+2. **Kodėl `List` yra greitas su mažesniais duomenimis?** 
+   `std::list` elementai sujungti rodyklėmis. Ištrynus elementą, tiesiog panaikinama rodyklė (O(1) sudėtingumas). Todėl 2 strategija liste veikia akimirksniu (pvz., 1M įrašų – vos 0.2 s).
 
-3. **Netikėtas rezultatas su 10 milijonų įrašų:** 
-   Su 10M įrašų `[Vector] 1 strategija` (kopijavimas) buvo greitesnė už 3 strategiją. Tai paaiškinama procesoriaus cache atmintimi – nuoseklus duomenų kopijavimas yra labai optimizuotas, o `std::partition` atlieka daug vietos keitimų, kurie su milžinišku duomenų kiekiu sukelia daug cache praleidimų. Taip pat listo 3 strategija su 10M tapo lėčiausia (22.36 s) dėl tos pačios priežasties – rodyklių „vaikymasis“ išmėtytoje atmintyje yra lėtas.
+3. **Netikėtas rezultatas su 10 milijonų įrašų (Cache atminties įtaka):** 
+   Su 10M įrašų matome labai įdomų reiškinį:
+   * `[Vector] 1 strategija` (2.72 s) buvo ženkliai greitesnė už 3 strategiją (11.78 s). Tai paaiškinama procesoriaus cache atmintimi – nuoseklus duomenų kopijavimas yra labai optimizuotas, o `std::partition` atlieka daug vietos keitimų, sukeliančių daug cache praleidimų (cache misses).
+   * Panašiai ir liste: `[List] 3 strategija` su `splice` (17.29 s) tapo lėčiausia, pralaimėjusi net 1-ai strategijai (5.18 s). Rodyklių „vaikymasis“ milžiniškoje išmėtytoje atmintyje yra lėtas procesas.
 
 4. **Bendras optimizavimas:** 
-   Jei duomenų nedaug (iki 100k), 3 strategija yra akivaizdžiai geriausia. Jei duomenų milžiniškas kiekis ir reikia taupyti laiką, gali būti, kad paprastas duomenų kopijavimas (1 strategija) laimės prieš sudėtingus algoritmus. Tai parodo, kad optimizavimas visada turi būti pagrįstas testavimu, o ne aklu algoritmų naudojimu.
+   Jei duomenų nedaug (iki 100k), 3 strategija yra akivaizdžiai geriausia. Tačiau su milžinišku duomenų kiekiu (10M) paprastas duomenų kopijavimas (1 strategija) gali netikėtai laimėti prieš sudėtingus algoritmus. Tai parodo, kad optimizavimas visada turi būti pagrįstas realiais testais, o ne aklu taisyklių taikymu.
