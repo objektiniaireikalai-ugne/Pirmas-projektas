@@ -16,6 +16,20 @@ Objektinio programavimo kurso darbas. Programa leidžia surinkti studentų namų
 - [Versijos (releases)](#versijos-releases)
 - [Efektyvumo tyrimai](#efektyvumo-tyrimai)
 
+## Reikalavimai ir paleidimas
+
+Norint sukompiliuoti ir paleisti programą, reikalingas C++ kompiliatorius (palaikantis C++17 standartą, pvz., GCC, Clang, MSVC) ir **CMake** įrankis.
+
+### Diegimas naudojant CMake (Bet kuriai OS)
+
+1. Nuklonuokite repozitoriją arba atsisiųskite ją kaip ZIP failą.
+2. Terminale (arba komandinėje eilutėje) atidarykite projekto aplanką ir įvykdykite šias komandas:
+   ```bash
+   mkdir build
+   cd build
+   cmake ..
+   cmake --build . --config Release
+
 ## Naudojimas
 
 Paleidus programą rodomas meniu:
