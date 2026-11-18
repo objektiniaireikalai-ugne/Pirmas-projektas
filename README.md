@@ -255,17 +255,16 @@ Tyrimo metu buvo realizuotos ir palygintos trys skirtingos studentų dalijimo į
 
 **1 strategija (Du nauji konteineriai):**
 Studentai yra tiesiog nukopijuojami iš pradinio konteinerio į du naujus: `vargsiukai` ir `kietiakiai`. Pradinis konteineris lieka nepakitęs. 
-*Šios strategijos trūkumas:* Ji yra neefektyvi atminties atžvilgiu, nes kiekvienas studentas atmintyje egzistuoja du kartus (originaliame sąraše ir viename iš naujų).
+*Šios strategijos trūkumas:* Ji yra neefektyvi atminties atžvilgiu, nes kiekvienas studentas atmintyje egzistuoja du kartus.
 
-**2 strategija (Vienas naujas konteineris ir trynimas):**
-Studentai, kurių balas < 5.0, yra nukopijuojami į `vargsiukai` konteinerį ir **ištrinami** iš pradinio. Po šio veiksmo pradiniame konteineryje lieka tik kietiakiai. 
-*Šios strategijos privalumas:* Efektyvus atminties naudojimas. 
-*Trūkumas:* Trynimas (`erase`) yra labai „skausmingas“ `std::vector` konteineriui, nes ištrinus elementą, visi likę elementai turi būti pastumti atmintyje. Tuo tarpu `std::list` trynimą atlieka akimirksniu.
+**2 strategija (Rūšiavimas ir ištrynimas nuo galo):**
+Pirminis studentų sąrašas yra surūšiuojamas mažėjančia tvarka pagal galutinį balą (`std::sort` arba `list::sort`). Tada iš konteinerio galo (`pop_back`) yra išimami studentai, kurių balas mažesnis nei 5.0, ir perkeliami į `vargsiukai` konteinerį.
+*Šios strategijos trūkumas:* Nors trynimas nuo galo yra greitas, pats rūšiavimas užima daug laiko (O(N log N)).
 
 **3 strategija (Optimizuota su STL algoritmais):**
-Ši strategija – tai 2 strategijos patobulinimas, panaudojant efektyvius C++ standartinės bibliotekos (STL) algoritmus.
-*   **`std::vector` atveju:** Panaudotas `std::partition` algoritmas, kuris per vieną ėjimą (O(N)) suskirsto vektorių į dvi dalis (vargšiukus priekyje, kietiakius gale). Tada vargsiukai nukopijuojami ir ištrinami vienu `erase` metodu. Tai leidžia išvengti lėto trynimo ciklo viduje.
-*   **`std::list` atveju:** Panaudotas specialus `splice` metodas, kuris „perkelia“ atminties mazgus iš vieno sąrašo į kitą net nekopijuodamas studentų duomenų. Tai užima O(1) laiko.
+Ši strategija – tai patobulinimas, panaudojant efektyvius C++ standartinės bibliotekos (STL) algoritmus.
+*   **`std::vector` atveju:** Panaudotas `std::partition` algoritmas, kuris per vieną ėjimą (O(N)) suskirsto vektorių į dvi dalis. Tada vargšiukai nukopijuojami į naują konteinerį ir ištrinami iš pradinio vienu `erase` metodu.
+*   **`std::list` atveju:** Panaudotas tas pats `std::partition` algoritmas, pritaikytas dvikrypčiam sąrašui.
 
 ### Testavimo rezultatai
 
@@ -273,35 +272,32 @@ Studentai, kurių balas < 5.0, yra nukopijuojami į `vargsiukai` konteinerį ir 
 
 | Įrašai | 1 strategija | 2 strategija | 3 strategija |
 |-------:|-------------:|-------------:|-------------:|
-| 1 000 | 0.00026 s | 0.01194 s | 0.00015 s |
-| 10 000 | 0.00214 s | 1.11708 s | 0.00278 s |
-| 100 000 | 0.01993 s | **117.681 s** | 0.01989 s |
-| 1 000 000 | 0.18632 s | *(praleista)* | 0.21806 s |
-| 10 000 000 | 2.72218 s | *(praleista)* | 11.7826 s |
+| 1 000 | 0.00031 s | 0.00071 s | 0.00018 s |
+| 10 000 | 0.00165 s | 0.00881 s | 0.00356 s |
+| 100 000 | 0.02125 s | 0.12659 s | 0.02614 s |
+| 1 000 000 | 0.23793 s | 1.54725 s | 0.25301 s |
+| 10 000 000 | 4.92349 s | 34.4320 s | 20.1972 s |
 
 **Rezultatai su `std::list`**
 
 | Įrašai | 1 strategija | 2 strategija | 3 strategija |
 |-------:|-------------:|-------------:|-------------:|
-| 1 000 | 0.00057 s | 0.00017 s | 0.00009 s |
-| 10 000 | 0.00312 s | 0.00293 s | 0.00131 s |
-| 100 000 | 0.02862 s | 0.01920 s | 0.00947 s |
-| 1 000 000 | 0.31070 s | 0.20922 s | 0.09863 s |
-| 10 000 000 | 5.18789 s | 12.5937 s | 17.2927 s |
+| 1 000 | 0.00034 s | 0.00054 s | 0.00023 s |
+| 10 000 | 0.00309 s | 0.00706 s | 0.00377 s |
+| 100 000 | 0.03514 s | 0.08655 s | 0.03780 s |
+| 1 000 000 | 0.34426 s | 1.20586 s | 0.34267 s |
+| 10 000 000 | 6.03416 s | 43.9877 s | 63.2920 s |
 
-<img width="342" height="625" alt="testas" src="https://github.com/user-attachments/assets/aa4cb72b-c9fe-4525-a30e-daf0891eec71" />
+<img width="405" height="759" alt="dalijimas" src="https://github.com/user-attachments/assets/925df409-c4a1-4002-98f5-66c94eedfa82" />
 
 ### Išvados
 
-1. **Kodėl `Vector` 2 strategija yra katastrofiška?** 
-   `std::vector` atmintyje elementus laiko ištisai. Ištrinant elementą iš vidurio, kompiuteris turi fiziškai pastumti visus likusius elementus į kairę (O(N) sudėtingumas). Su 100 000 įrašų tai užtruko beveik 118 sekundžių, todėl su 1 000 000 būtų užtrukę valandas. Ši strategija vektoriui yra visiškai netinkama.
-
-2. **Kodėl `List` yra greitas su mažesniais duomenimis?** 
-   `std::list` elementai sujungti rodyklėmis. Ištrynus elementą, tiesiog panaikinama rodyklė (O(1) sudėtingumas). Todėl 2 strategija liste veikia akimirksniu (pvz., 1M įrašų – vos 0.2 s).
-
-3. **Netikėtas rezultatas su 10 milijonų įrašų (Cache atminties įtaka):** 
-   Su 10M įrašų matome labai įdomų reiškinį:
-   * `[Vector] 1 strategija` (2.72 s) buvo ženkliai greitesnė už 3 strategiją (11.78 s). Tai paaiškinama procesoriaus cache atmintimi – nuoseklus duomenų kopijavimas yra labai optimizuotas, o `std::partition` atlieka daug vietos keitimų, sukeliančių daug cache praleidimų (cache misses).
+1. **2 strategijos spartos problema:** Rūšiavimas yra pati brangiausia operacija. Su 10 milijonų įrašų vektoriuje 2 strategija užtruko net 34,4 s, o liste – 44 s. Tai patvirtina, kad ieškoti vargšiukų rūšiuojant visą masyvą nėra efektyvu.
+2. **Optimizavimo ribos ir Cache atmintis:** 
+   * Su mažesniais duomenimis (iki 1M įrašų) 3 strategija (`std::partition`) yra labai konkurencinga arba greičiausia, nes jai nereikia rūšiuoti masyvo.
+   * Tačiau su 10M įrašų matome netikėtą rezultatą: **1 strategija** vektoriuje (4.92 s) yra kur kas greitesnė už 3 strategiją (20.19 s). Tai lemia procesoriaus *Cache* atmintis – nuoseklus elementų kopijavimas (1 strategija) yra draugiškesnis procesoriui, o `std::partition` atlieka daug vietos keitimų, sukeliančių *cache misses*.
+   * Sąraše (`list`) su 10M įrašų 1 strategija (6.03 s) taip pat nugalėjo 3 strategiją (63.29 s) dėl tos pačios priežasties – rodyklių „vaikymasis“ dideliame duomenų kiekyje yra lėtas.
+3. **Bendra išvada:** Jei duomenų nedaug, geriausia naudoti `std::partition` (3 strategija). Tačiau esant milžiniškiems duomenų kiekiams, paprastas kopijavimas į du naujus konteinerius (1 strategija) gali pasirodyti netikėtai greitesnis.
    * Panašiai ir liste: `[List] 3 strategija` su `splice` (17.29 s) tapo lėčiausia, pralaimėjusi net 1-ai strategijai (5.18 s). Rodyklių „vaikymasis“ milžiniškoje išmėtytoje atmintyje yra lėtas procesas.
 
 4. **Bendras optimizavimas:** 
